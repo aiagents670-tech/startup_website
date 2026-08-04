@@ -29,7 +29,15 @@ export default function Navbar() {
 
   // Close mobile menu on route change
   useEffect(() => {
-    setMobileOpen(false);
+    let active = true;
+    requestAnimationFrame(() => {
+      if (active) {
+        setMobileOpen(false);
+      }
+    });
+    return () => {
+      active = false;
+    };
   }, [pathname]);
 
   return (

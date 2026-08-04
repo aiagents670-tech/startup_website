@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { caseStudies } from '@/lib/data/testimonials';
-import Link from 'next/link';
+
 import ContactCTA from '@/components/home/ContactCTA';
 
 export const metadata: Metadata = {

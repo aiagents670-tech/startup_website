@@ -86,7 +86,7 @@ async function runAudit() {
     email: testEmail,
   };
 
-  const { data: inserted, error: insertErr } = await supabase
+  const { error: insertErr } = await supabase
     .from(targetTable)
     .insert([insertPayload])
     .select();
@@ -144,7 +144,6 @@ async function runAudit() {
 
   // Step 11 & 12: Realtime Channel Subscription
   console.log(`\n11 & 12. Testing Supabase Realtime channel subscription...`);
-  let eventReceived = false;
 
   const channel = supabase
     .channel('audit_realtime_channel')
@@ -153,7 +152,6 @@ async function runAudit() {
       { event: '*', schema: 'public', table: targetTable },
       (payload) => {
         console.log(`⚡ REALTIME EVENT RECEIVED [${payload.eventType}]:`, payload.new || payload.old);
-        eventReceived = true;
       }
     )
     .subscribe((status) => {

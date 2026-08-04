@@ -5,23 +5,7 @@ import Link from 'next/link';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import { services } from '@/lib/data/services';
 
-/* Map service slugs → ContactForm service option values */
-const slugToServiceLabel: Record<string, string> = {
-  'web-development':       'Web Development',
-  'web-applications':      'Web Development',
-  'mobile-apps':           'Mobile App Development',
-  'ui-ux-design':          'UI/UX Design',
-  'ecommerce-development': 'E-commerce Development',
-  'ai-solutions':          'AI Automation',
-  'custom-software':       'Custom Software Development',
-  'api-development':       'API Development',
-  'cloud-solutions':       'Cloud Solutions',
-  'devops':                'Cloud Solutions',
-  'digital-marketing':     'Digital Marketing',
-  'seo':                   'Digital Marketing',
-  'maintenance':           'Business Website',
-  'technical-support':     'Business Website',
-};
+
 
 export default function Services() {
   return (
