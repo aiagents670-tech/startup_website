@@ -6,7 +6,7 @@ export const testimonials = [
     company: 'FinTrack Pro',
     avatar: '/images/testimonials/sarah.jpg',
     rating: 5,
-    review: 'TechVision delivered beyond our expectations. The platform completely transformed how we manage portfolios. Their team was professional, communicative, and technically brilliant throughout the entire project.',
+    review: 'TERVOM delivered beyond our expectations. The platform completely transformed how we manage portfolios. Their team was professional, communicative, and technically brilliant throughout the entire project.',
     project: 'Financial Dashboard',
   },
   {
@@ -16,7 +16,7 @@ export const testimonials = [
     company: 'MediCare Health',
     avatar: '/images/testimonials/james.jpg',
     rating: 5,
-    review: 'The telemedicine app TechVision built has genuinely improved healthcare access for thousands of patients. The quality of the code, the attention to HIPAA compliance, and the overall user experience were exceptional.',
+    review: 'The telemedicine app TERVOM built has genuinely improved healthcare access for thousands of patients. The quality of the code, the attention to HIPAA compliance, and the overall user experience were exceptional.',
     project: 'Telemedicine Platform',
   },
   {
@@ -26,7 +26,7 @@ export const testimonials = [
     company: 'ShopSmart Retail',
     avatar: '/images/testimonials/maria.jpg',
     rating: 5,
-    review: 'The AI-powered recommendation engine increased our conversion rate by 62%. TechVision\'s deep understanding of both ecommerce and machine learning made this project a massive success for us.',
+    review: "The AI-powered recommendation engine increased our conversion rate by 62%. TERVOM's deep understanding of both ecommerce and machine learning made this project a massive success for us.",
     project: 'AI Ecommerce Platform',
   },
   {
@@ -46,7 +46,7 @@ export const testimonials = [
     company: 'LearnSphere EdTech',
     avatar: '/images/testimonials/priya.jpg',
     rating: 5,
-    review: 'TechVision built exactly what we envisioned for LearnSphere. The platform is beautiful, fast, and our students love it. Course completion rates tripled after launch. Incredible work!',
+    review: 'TERVOM built exactly what we envisioned for LearnSphere. The platform is beautiful, fast, and our students love it. Course completion rates tripled after launch. Incredible work!',
     project: 'EdTech Learning Platform',
   },
   {
@@ -56,7 +56,7 @@ export const testimonials = [
     company: 'ManufactERP Inc.',
     avatar: '/images/testimonials/michael.jpg',
     rating: 5,
-    review: 'The ERP system TechVision developed unified our entire manufacturing operation. We saved millions in the first year through improved efficiency and real-time inventory visibility.',
+    review: 'The ERP system TERVOM developed unified our entire manufacturing operation. We saved millions in the first year through improved efficiency and real-time inventory visibility.',
     project: 'Manufacturing ERP',
   },
 ];
@@ -76,7 +76,7 @@ export const caseStudies = [
     technologies: ['Next.js', 'Python', 'FastAPI', 'PostgreSQL', 'Redis', 'AWS', 'TensorFlow'],
     image: '/images/case-studies/fintech.jpg',
     testimonial: {
-      text: 'TechVision didn\'t just build software — they helped us build a company.',
+      text: "TERVOM didn't just build software — they helped us build a company.",
       author: 'Sarah Mitchell, CEO',
     },
   },

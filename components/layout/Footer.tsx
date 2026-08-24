@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import NewsletterForm from './NewsletterForm';
 import { Mail, Phone } from 'lucide-react';
 import { FaTwitter, FaLinkedin, FaGithub, FaInstagram, FaYoutube } from 'react-icons/fa';
@@ -8,7 +9,6 @@ import { FaTwitter, FaLinkedin, FaGithub, FaInstagram, FaYoutube } from 'react-i
 const footerLinks = {
   company: [
     { label: 'About Us', href: '/about' },
-    { label: 'Our Team', href: '/about#team' },
     { label: 'Careers', href: '/careers' },
     { label: 'Blog', href: '/blog' },
     { label: 'Case Studies', href: '/case-studies' },
@@ -36,11 +36,11 @@ const footerLinks = {
 };
 
 const socialLinks = [
-  { icon: FaTwitter, href: 'https://twitter.com/techvision', label: 'Twitter' },
-  { icon: FaLinkedin, href: 'https://linkedin.com/company/techvision', label: 'LinkedIn' },
-  { icon: FaGithub, href: 'https://github.com/techvision', label: 'GitHub' },
-  { icon: FaInstagram, href: 'https://instagram.com/techvision', label: 'Instagram' },
-  { icon: FaYoutube, href: 'https://youtube.com/techvision', label: 'YouTube' },
+  { icon: FaTwitter, href: 'https://twitter.com/tervom', label: 'Twitter' },
+  { icon: FaLinkedin, href: 'https://linkedin.com/company/tervom', label: 'LinkedIn' },
+  { icon: FaGithub, href: 'https://github.com/tervom', label: 'GitHub' },
+  { icon: FaInstagram, href: 'https://instagram.com/tervom', label: 'Instagram' },
+  { icon: FaYoutube, href: 'https://youtube.com/tervom', label: 'YouTube' },
 ];
 
 export default function Footer() {
@@ -49,7 +49,7 @@ export default function Footer() {
       {/* Background decoration */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-32 -left-32 w-96 h-96 bg-primary-500/5 rounded-full blur-3xl" />
-        <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-secondary-500/5 rounded-full blur-3xl" />
+        <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-primary-400/5 rounded-full blur-3xl" />
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -58,10 +58,10 @@ export default function Footer() {
           <div className="glass-card p-8 flex flex-col md:flex-row items-center justify-between gap-6">
             <div>
               <h3 className="text-xl font-heading font-bold text-[var(--foreground)] mb-1">
-                Stay ahead with TechVision
+                Stay ahead with TERVOM
               </h3>
               <p className="text-[var(--muted)] text-sm">
-                Get the latest insights on technology, AI, and digital trends.
+                Get the latest insights on technology, AI, and digital innovation — straight to your inbox.
               </p>
             </div>
             <NewsletterForm />
@@ -72,24 +72,35 @@ export default function Footer() {
         <div className="py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8">
           {/* Brand */}
           <div className="lg:col-span-2">
-            <Link href="/" className="flex items-center gap-2 mb-4">
-              <div className="w-9 h-9 rounded-xl gradient-bg flex items-center justify-center shadow-lg">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="text-white">
-                  <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
+            <Link href="/" className="flex items-center gap-3 mb-4">
+              <div className="relative w-10 h-10 flex-shrink-0">
+                <Image
+                  src="/tervom-logo-dark.png"
+                  alt="TERVOM Logo"
+                  fill
+                  sizes="40px"
+                  className="object-contain"
+                />
               </div>
-              <span className="font-heading font-bold text-xl gradient-text">TechVision</span>
+              <div className="flex flex-col">
+                <span className="font-heading font-bold text-xl gradient-text leading-tight tracking-wide">
+                  TERVOM
+                </span>
+                <span className="text-[9px] font-semibold tracking-[0.15em] text-[var(--muted)] uppercase leading-tight">
+                  Engineering Digital Success.
+                </span>
+              </div>
             </Link>
             <p className="text-[var(--muted)] text-sm leading-relaxed mb-6 max-w-xs">
-              Transforming businesses through innovative technology solutions. We build scalable, modern digital products that drive growth.
+              We engineer digital success for startups and enterprises worldwide. Scalable, modern, and future-proof technology solutions — delivered with precision.
             </p>
             {/* Contact Info */}
             <div className="space-y-3">
-              <a href="mailto:hello@techvision.io" className="flex items-center gap-3 text-[var(--muted)] hover:text-primary-500 transition-colors text-sm group">
+              <a href="mailto:hello@tervom.com" className="flex items-center gap-3 text-[var(--muted)] hover:text-primary-500 transition-colors text-sm group">
                 <div className="w-8 h-8 rounded-lg bg-primary-500/10 flex items-center justify-center group-hover:bg-primary-500/20 transition-colors">
                   <Mail size={14} className="text-primary-500" />
                 </div>
-                hello@techvision.io
+                hello@tervom.com
               </a>
               <a href="tel:+917416858563" className="flex items-center gap-3 text-[var(--muted)] hover:text-primary-500 transition-colors text-sm group">
                 <div className="w-8 h-8 rounded-lg bg-primary-500/10 flex items-center justify-center group-hover:bg-primary-500/20 transition-colors">
@@ -129,7 +140,7 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="py-6 border-t border-[var(--border)] flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-[var(--muted)] text-sm">
-            © {new Date().getFullYear()} TechVision. All rights reserved. Built with ❤️ using Next.js
+            © {new Date().getFullYear()} TERVOM. All rights reserved. Code. Innovate. Elevate.
           </p>
           <div className="flex items-center gap-3">
             {socialLinks.map(({ icon: Icon, href, label }) => (

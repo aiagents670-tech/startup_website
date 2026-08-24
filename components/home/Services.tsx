@@ -21,7 +21,7 @@ export default function Services() {
             className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-widest text-primary-500 mb-4 px-4 py-2 rounded-full bg-primary-500/10 border border-primary-500/20"
           >
             <Sparkles size={14} />
-            What We Do
+            What We Deliver
           </motion.span>
 
           <motion.h2
@@ -31,7 +31,7 @@ export default function Services() {
             transition={{ delay: 0.1 }}
             className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-[var(--foreground)] mb-4"
           >
-            Services That <span className="gradient-text">Power Growth</span>
+            Comprehensive IT Solutions <span className="gradient-text">That Scale With You</span>
           </motion.h2>
 
           <motion.p
@@ -41,8 +41,8 @@ export default function Services() {
             transition={{ delay: 0.2 }}
             className="text-[var(--muted)] max-w-2xl mx-auto text-lg"
           >
-            From concept to deployment, we deliver end-to-end technology solutions that scale with your business.
-            <span className="block mt-1 text-sm text-primary-500 font-medium">Click any service to get a free quote →</span>
+            From concept to deployment, TERVOM delivers end-to-end technology solutions engineered to grow with your business.
+            <span className="block mt-1 text-sm text-primary-500 font-medium">Click any service to get a free consultation →</span>
           </motion.p>
         </div>
 

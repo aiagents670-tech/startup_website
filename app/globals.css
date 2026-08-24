@@ -1,16 +1,16 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-primary-50: #eff6ff;
-  --color-primary-100: #dbeafe;
-  --color-primary-200: #bfdbfe;
-  --color-primary-300: #93c5fd;
-  --color-primary-400: #60a5fa;
-  --color-primary-500: #3b82f6;
-  --color-primary-600: #2563eb;
-  --color-primary-700: #1d4ed8;
-  --color-primary-800: #1e40af;
-  --color-primary-900: #1e3a8a;
+  --color-primary-50: #e8f0ff;
+  --color-primary-100: #c7d9ff;
+  --color-primary-200: #9ab9ff;
+  --color-primary-300: #6099ff;
+  --color-primary-400: #2d78ff;
+  --color-primary-500: #0a52cc;
+  --color-primary-600: #0840a8;
+  --color-primary-700: #062f84;
+  --color-primary-800: #041f60;
+  --color-primary-900: #020f3a;
 
   --color-secondary-50: #faf5ff;
   --color-secondary-100: #f3e8ff;
@@ -109,14 +109,14 @@ textarea {
 
 /* ─── Gradient Text ──────────────────────────────────────────── */
 .gradient-text {
-  background: linear-gradient(135deg, #3b82f6 0%, #a855f7 50%, #06b6d4 100%);
+  background: linear-gradient(135deg, #0a52cc 0%, #2d78ff 40%, #00c8ff 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .gradient-text-blue-purple {
-  background: linear-gradient(135deg, #2563eb 0%, #9333ea 100%);
+  background: linear-gradient(135deg, #062f84 0%, #0a52cc 50%, #00c8ff 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -124,11 +124,11 @@ textarea {
 
 /* ─── Gradient Backgrounds ───────────────────────────────────── */
 .gradient-bg {
-  background: linear-gradient(135deg, #3b82f6 0%, #9333ea 50%, #06b6d4 100%);
+  background: linear-gradient(135deg, #0a52cc 0%, #1a6dff 50%, #00c8ff 100%);
 }
 
 .gradient-bg-soft {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%);
+  background: linear-gradient(135deg, rgba(10, 82, 204, 0.1) 0%, rgba(0, 200, 255, 0.1) 100%);
 }
 
 /* ─── Hero Blob Animations ───────────────────────────────────── */
@@ -191,7 +191,7 @@ textarea {
   background: var(--surface);
 }
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #3b82f6, #9333ea);
+  background: linear-gradient(135deg, #0a52cc, #00c8ff);
   border-radius: 3px;
 }
 
@@ -235,7 +235,7 @@ textarea {
   left: 0;
   width: 0;
   height: 2px;
-  background: linear-gradient(90deg, #3b82f6, #9333ea);
+  background: linear-gradient(90deg, #0a52cc, #00c8ff);
   border-radius: 2px;
   transition: width 0.3s ease;
 }
@@ -255,3 +255,148 @@ textarea {
 .prose-custom h2 { font-size: 1.5rem; font-weight: 700; margin-top: 2rem; margin-bottom: 0.75rem; color: var(--foreground); }
 .prose-custom p { line-height: 1.8; margin-bottom: 1rem; color: var(--muted); }
 .prose-custom code { background: var(--surface-2); padding: 2px 6px; border-radius: 4px; font-size: 0.875rem; }
+
+/* ═══════════════════════════════════════════════════════════════
+   TERVOM PREMIUM LOGO & HEADER ANIMATIONS
+═══════════════════════════════════════════════════════════════ */
+
+/* ── Keyframes ── */
+@keyframes tervom-ring-spin {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes tervom-glow-pulse {
+  0%, 100% {
+    box-shadow:
+      0 0 0 0   rgba(45, 120, 255, 0.55),
+      0 0 18px 4px rgba(0, 200, 255, 0.35),
+      0 0 36px 8px rgba(168, 85, 247, 0.2);
+  }
+  50% {
+    box-shadow:
+      0 0 0 3px rgba(45, 120, 255, 0.25),
+      0 0 28px 8px rgba(0, 200, 255, 0.5),
+      0 0 52px 14px rgba(168, 85, 247, 0.3);
+  }
+}
+
+@keyframes tervom-letter-glow {
+  0%, 100% {
+    text-shadow:
+      0 0 12px rgba(45, 120, 255, 0.0),
+      0 0 24px rgba(0, 200, 255, 0.0);
+  }
+  50% {
+    text-shadow:
+      0 0 12px rgba(45, 120, 255, 0.6),
+      0 0 24px rgba(0, 200, 255, 0.4);
+  }
+}
+
+/* ── Logo Wrapper ── */
+.tervom-logo-wrapper {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  flex-shrink: 0;
+}
+
+/* ── Rotating outer light ring ── */
+.tervom-ring-outer {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0%,
+    rgba(45, 120, 255, 0.9) 20%,
+    rgba(0, 200, 255, 0.95) 40%,
+    rgba(168, 85, 247, 0.85) 60%,
+    rgba(45, 120, 255, 0.6) 80%,
+    transparent 100%
+  );
+  animation: tervom-ring-spin 2.4s linear infinite;
+  border-radius: 50%;
+  z-index: 0;
+}
+
+/* Mask the inner part to show only the ring edge */
+.tervom-ring-outer::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  background: var(--background);
+}
+
+/* ── Inner logo circle with glowing border ── */
+.tervom-logo-inner {
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  overflow: hidden;
+  z-index: 1;
+  animation: tervom-glow-pulse 3s ease-in-out infinite;
+  background: linear-gradient(135deg, #060b14 0%, #0d1526 100%);
+}
+
+/* ── Logo image ── */
+.tervom-logo-img {
+  border-radius: 50%;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+}
+
+/* ── Individual animated letters ── */
+.tervom-letter {
+  font-family: var(--font-heading), 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  background: linear-gradient(135deg, #2d78ff 0%, #00c8ff 50%, #a855f7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: inline-block;
+  line-height: 1;
+  position: relative;
+}
+
+/* Glow sweep after all letters appear */
+.tervom-letter {
+  animation: tervom-letter-glow 3s ease-in-out infinite;
+  animation-delay: calc(var(--i, 0) * 0.12s + 1.2s);
+}
+
+/* ── Invisible glow overlay behind text ── */
+.tervom-word-glow {
+  position: absolute;
+  pointer-events: none;
+  inset: -4px -12px;
+  background: radial-gradient(ellipse, rgba(0, 200, 255, 0.18) 0%, transparent 70%);
+  border-radius: 8px;
+  z-index: -1;
+}
+
+/* ── Glassmorphism header (dark mode enhanced) ── */
+.tervom-header-glass {
+  background: rgba(6, 11, 20, 0.75);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border-bottom: 1px solid rgba(45, 120, 255, 0.18);
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.35),
+    0 1px 0 rgba(0, 200, 255, 0.08) inset;
+}
+
+.light .tervom-header-glass,
+:root:not(.dark) .tervom-header-glass {
+  background: rgba(255, 255, 255, 0.78);
+  border-bottom: 1px solid rgba(45, 120, 255, 0.12);
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.08),
+    0 1px 0 rgba(0, 200, 255, 0.06) inset;
+}
+

@@ -28,7 +28,7 @@ export default function Testimonials() {
             viewport={{ once: true }}
             className="inline-block text-sm font-semibold uppercase tracking-widest text-primary-500 mb-3"
           >
-            Client Love
+            Client Success Stories
           </motion.span>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -37,7 +37,7 @@ export default function Testimonials() {
             transition={{ delay: 0.1 }}
             className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-[var(--foreground)] mb-4"
           >
-            What Our <span className="gradient-text">Clients Say</span>
+            Trusted by Leaders, <span className="gradient-text">Loved by Teams</span>
           </motion.h2>
         </div>
 

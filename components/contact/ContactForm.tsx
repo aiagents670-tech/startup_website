@@ -4,7 +4,7 @@ import { useState, useEffect, Suspense } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Send, CheckCircle, Loader2 } from 'lucide-react';
+import { Send, CheckCircle, Loader2, AlertCircle } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 
 const schema = z.object({
@@ -83,6 +83,7 @@ function ContactFormInner() {
 
   const [submitted, setSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const {
     register,
@@ -108,6 +109,7 @@ function ContactFormInner() {
 
   const onSubmit = async (data: FormData) => {
     setIsLoading(true);
+    setSubmitError(null);
     try {
       const { supabase } = await import('@/lib/supabaseClient');
       const { error } = await supabase.from('contact_submissions').insert([
@@ -123,26 +125,34 @@ function ContactFormInner() {
         },
       ]);
 
-      const isMissingTable =
-        error &&
-        (error.code === '42P01' ||
-          error.code === 'PGRST204' ||
+      if (error) {
+        // Table not created yet — warn silently, still show success to user
+        const isTableMissing =
+          error.code === 'PGRST205' ||
+          error.code === '42P01' ||
           error.message?.includes('schema cache') ||
-          error.message?.includes('Could not find the table'));
+          error.message?.includes('does not exist') ||
+          error.message?.includes('Could not find');
 
-      if (error && !isMissingTable) {
-        console.error('Supabase contact submission error:', error.message);
-      } else if (isMissingTable) {
-        console.info('Notice: Supabase table contact_submissions is not yet created on remote database.');
+        if (isTableMissing) {
+          console.warn('⚠ Supabase table not created yet. Run supabase_schema.sql in your Supabase dashboard.');
+        } else {
+          // Real error — surface it to user
+          console.error('Supabase contact submission error:', error.message, error.code);
+          setSubmitError('Something went wrong while sending your message. Please try again or email us directly.');
+          return;
+        }
       } else {
-        console.log('Contact submission stored in Supabase successfully:', data);
+        console.log('✅ Contact submission stored in Supabase successfully.');
       }
-    } catch (err) {
-      console.error('Error submitting to Supabase:', err);
-    } finally {
-      setIsLoading(false);
+
       setSubmitted(true);
       reset();
+    } catch (err) {
+      console.error('Error submitting to Supabase:', err);
+      setSubmitError('An unexpected error occurred. Please try again later.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -322,6 +332,13 @@ function ContactFormInner() {
         <p className="text-center text-xs text-[var(--muted)]">
           🔒 Your information is 100% confidential and never shared with third parties.
         </p>
+
+        {submitError && (
+          <div className="flex items-start gap-3 p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-sm">
+            <AlertCircle size={18} className="flex-shrink-0 mt-0.5" />
+            <span>{submitError}</span>
+          </div>
+        )}
       </form>
     </div>
   );

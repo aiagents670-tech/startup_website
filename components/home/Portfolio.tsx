@@ -44,7 +44,7 @@ export default function Portfolio() {
             transition={{ delay: 0.1 }}
             className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-[var(--foreground)] mb-4"
           >
-            Featured <span className="gradient-text">Projects</span>
+            Work That <span className="gradient-text">Speaks for Itself</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -53,7 +53,7 @@ export default function Portfolio() {
             transition={{ delay: 0.2 }}
             className="text-[var(--muted)] max-w-2xl mx-auto"
           >
-            500+ projects delivered across industries. Here are some of our most impactful works.
+            500+ projects delivered across industries. Real solutions, real impact — here are some of TERVOM&apos;s most transformative works.
           </motion.p>
         </div>
 

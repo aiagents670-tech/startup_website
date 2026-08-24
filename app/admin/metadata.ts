@@ -1,0 +1,6 @@
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: { default: 'Admin Dashboard', template: '%s | TERVOM Admin' },
+  robots: { index: false, follow: false },
+};

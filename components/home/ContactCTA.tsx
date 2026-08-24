@@ -14,7 +14,7 @@ export default function ContactCTA() {
       {/* Background blobs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary-500/20 rounded-full blur-3xl animate-blob" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-secondary-500/20 rounded-full blur-3xl animate-blob animation-delay-2000" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-primary-400/15 rounded-full blur-3xl animate-blob animation-delay-2000" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-accent-500/10 rounded-full blur-3xl animate-blob animation-delay-4000" />
       </div>
 
@@ -32,7 +32,7 @@ export default function ContactCTA() {
             viewport={{ once: true }}
             className="inline-flex items-center gap-2 gradient-bg-soft border border-primary-500/20 px-4 py-2 rounded-full mb-6"
           >
-            <span className="text-primary-500 text-sm font-semibold">✨ Limited Availability — Book Now</span>
+            <span className="text-primary-500 text-sm font-semibold">✨ Limited Slots Available — Book Your Consultation</span>
           </motion.div>
 
           <motion.h2
@@ -42,8 +42,8 @@ export default function ContactCTA() {
             transition={{ delay: 0.1 }}
             className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-[var(--foreground)] mb-6"
           >
-            Ready to Build Your{' '}
-            <span className="gradient-text">Next Digital Product?</span>
+            Ready to Engineer Your{' '}
+            <span className="gradient-text">Digital Future?</span>
           </motion.h2>
 
           <motion.p
@@ -53,8 +53,8 @@ export default function ContactCTA() {
             transition={{ delay: 0.2 }}
             className="text-[var(--muted)] text-lg max-w-2xl mx-auto mb-10"
           >
-            Join 300+ successful companies that trusted TechVision to build their digital future.
-            Let&apos;s discuss your project and create something extraordinary together.
+            Join 300+ successful companies that trusted TERVOM to engineer their digital success.
+            Let&apos;s discuss your project and build something extraordinary together.
           </motion.p>
 
           {/* CTA Buttons */}
@@ -71,7 +71,7 @@ export default function ContactCTA() {
               className="inline-flex items-center gap-2 gradient-bg text-white font-semibold px-8 py-4 rounded-2xl shadow-xl hover:opacity-90 hover:scale-105 transition-all duration-200"
             >
               <Calendar size={18} />
-              Book Free Consultation
+              Schedule Free Consultation
             </Link>
             <Link
               href="/contact#quote"
@@ -79,7 +79,7 @@ export default function ContactCTA() {
               className="inline-flex items-center gap-2 glass-card text-[var(--foreground)] font-semibold px-8 py-4 rounded-2xl hover:border-primary-500/50 hover:scale-105 transition-all duration-200"
             >
               <MessageCircle size={18} />
-              Get Quote
+              Get a Quote
               <ArrowRight size={16} />
             </Link>
           </motion.div>

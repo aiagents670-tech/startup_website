@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import ThemeToggle from '@/components/ui/ThemeToggle';
+import TervomLogo from '@/components/layout/TervomLogo';
 
 const navLinks = [
   { label: 'Home', href: '/' },
@@ -42,22 +43,16 @@ export default function Navbar() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? 'glass-card rounded-none border-x-0 border-t-0 shadow-lg'
-          : 'bg-transparent border-transparent'
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 tervom-header-glass`}
     >
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" aria-label="Main navigation">
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group" aria-label="TechVision Home">
-            <div className="w-9 h-9 rounded-xl gradient-bg flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="text-white">
-                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </div>
-            <span className="font-heading font-bold text-xl gradient-text">TechVision</span>
+          <Link href="/" className="flex items-center gap-3" aria-label="TERVOM Home">
+            <TervomLogo />
+            <span className="text-[9px] font-semibold tracking-[0.18em] text-[var(--muted)] uppercase leading-tight hidden sm:block mt-1">
+              Engineering Digital Success.
+            </span>
           </Link>
 
           {/* Desktop Nav */}
@@ -85,7 +80,7 @@ export default function Navbar() {
               id="nav-cta-btn"
               className="hidden sm:inline-flex items-center gap-2 gradient-bg text-white text-sm font-semibold px-5 py-2.5 rounded-full shadow-lg hover:opacity-90 hover:scale-105 transition-all duration-200"
             >
-              Get Free Quote
+              Start Your Project
             </Link>
 
             {/* Mobile hamburger */}
@@ -138,7 +133,7 @@ export default function Navbar() {
                 onClick={() => setMobileOpen(false)}
                 className="mt-1 gradient-bg text-white text-base font-semibold px-5 py-3.5 rounded-xl text-center hover:opacity-90 transition-opacity min-h-[48px] flex items-center justify-center"
               >
-                Get Free Quote
+                Start Your Project
               </Link>
             </div>
           </motion.div>

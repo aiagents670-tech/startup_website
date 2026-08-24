@@ -3,12 +3,12 @@
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ChevronDown, ArrowRight } from 'lucide-react';
+import { ChevronDown, ArrowRight, Shield, Zap, Globe } from 'lucide-react';
 
 const stats = [
   { value: '500+', label: 'Projects Delivered' },
   { value: '300+', label: 'Happy Clients' },
-  { value: '10+', label: 'Years Experience' },
+  { value: '8+', label: 'Years Experience' },
   { value: '99%', label: 'Client Satisfaction' },
 ];
 
@@ -22,13 +22,13 @@ export default function Hero() {
       {/* Animated background blobs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/4 -left-32 w-[600px] h-[600px] bg-primary-500/20 rounded-full blur-3xl animate-blob" />
-        <div className="absolute top-1/3 -right-32 w-[500px] h-[500px] bg-secondary-500/20 rounded-full blur-3xl animate-blob animation-delay-2000" />
-        <div className="absolute bottom-1/4 left-1/3 w-[400px] h-[400px] bg-accent-500/15 rounded-full blur-3xl animate-blob animation-delay-4000" />
+        <div className="absolute top-1/3 -right-32 w-[500px] h-[500px] bg-primary-400/15 rounded-full blur-3xl animate-blob animation-delay-2000" />
+        <div className="absolute bottom-1/4 left-1/3 w-[400px] h-[400px] bg-accent-500/10 rounded-full blur-3xl animate-blob animation-delay-4000" />
         {/* Grid pattern */}
         <div
           className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05]"
           style={{
-            backgroundImage: `linear-gradient(rgba(59,130,246,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(59,130,246,0.5) 1px, transparent 1px)`,
+            backgroundImage: `linear-gradient(rgba(10,82,204,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(10,82,204,0.5) 1px, transparent 1px)`,
             backgroundSize: '60px 60px',
           }}
         />
@@ -50,7 +50,7 @@ export default function Hero() {
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
               </span>
               <span className="text-sm font-medium text-[var(--muted)]">
-                🚀 Now offering AI-powered development services
+                🚀 Trusted by 300+ global clients across 20+ countries
               </span>
             </motion.div>
 
@@ -61,10 +61,10 @@ export default function Hero() {
               transition={{ duration: 0.6, delay: 0.1 }}
               className="font-heading text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6"
             >
-              We Build{' '}
-              <span className="gradient-text">Digital Products</span>{' '}
-              That Drive{' '}
-              <span className="gradient-text">Growth</span>
+              Engineering Your{' '}
+              <span className="gradient-text">Digital Success</span>{' '}
+              — From Vision{' '}
+              <span className="gradient-text">to Reality</span>
             </motion.h1>
 
             <motion.p
@@ -73,9 +73,29 @@ export default function Hero() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="text-lg text-[var(--muted)] leading-relaxed mb-8 max-w-xl"
             >
-              TechVision is a premium IT services company helping startups and enterprises build
-              world-class web apps, mobile apps, and AI solutions. From idea to launch — we&apos;ve got you.
+              TERVOM is a premium IT services company helping startups and enterprises build
+              world-class web apps, mobile apps, and AI solutions. We don&apos;t just write code —
+              we engineer competitive advantages that grow your business.
             </motion.p>
+
+            {/* Trust pillars */}
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.25 }}
+              className="flex flex-wrap gap-4 mb-8"
+            >
+              {[
+                { icon: Shield, text: 'Secure & Scalable' },
+                { icon: Zap, text: 'Fast Delivery' },
+                { icon: Globe, text: 'Global Standards' },
+              ].map(({ icon: Icon, text }) => (
+                <div key={text} className="flex items-center gap-1.5 text-sm text-[var(--muted)]">
+                  <Icon size={14} className="text-primary-500" />
+                  <span>{text}</span>
+                </div>
+              ))}
+            </motion.div>
 
             {/* CTA Buttons */}
             <motion.div
@@ -96,16 +116,16 @@ export default function Hero() {
               <Link
                 href="/services"
                 id="hero-view-services-btn"
-                className="relative overflow-hidden w-full sm:w-auto inline-flex items-center justify-center gap-2 gradient-bg text-white font-semibold px-8 py-4 rounded-2xl shadow-xl hover:shadow-[0_0_25px_rgba(59,130,246,0.45)] ring-2 ring-transparent hover:ring-primary-300/50 border border-white/20 hover:border-white/60 transition-all duration-300 group min-h-[48px]"
+                className="relative overflow-hidden w-full sm:w-auto inline-flex items-center justify-center gap-2 gradient-bg text-white font-semibold px-8 py-4 rounded-2xl shadow-xl hover:shadow-[0_0_25px_rgba(10,82,204,0.45)] ring-2 ring-transparent hover:ring-primary-300/50 border border-white/20 hover:border-white/60 transition-all duration-300 group min-h-[48px]"
               >
                 {/* Light shimmer sweep animation */}
                 <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out pointer-events-none" />
                 
                 {/* Glowing border background aura */}
-                <span className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-primary-400 via-secondary-400 to-accent-400 opacity-0 group-hover:opacity-30 blur-md transition-opacity duration-300 pointer-events-none" />
+                <span className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-primary-500 via-primary-400 to-accent-400 opacity-0 group-hover:opacity-30 blur-md transition-opacity duration-300 pointer-events-none" />
 
                 <span className="relative z-10 flex items-center justify-center gap-2">
-                  View Services
+                  Explore Services
                   <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform duration-300" />
                 </span>
               </Link>
@@ -140,7 +160,7 @@ export default function Hero() {
                 <div className="glass-card p-2 relative rounded-3xl overflow-hidden border border-[var(--border)] shadow-2xl">
                   <Image
                     src="/hero-workspace.png"
-                    alt="Futuristic IT Software & AI Solutions Workspace"
+                    alt="TERVOM — Engineering Digital Solutions"
                     width={800}
                     height={550}
                     priority

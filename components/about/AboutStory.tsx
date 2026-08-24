@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { companyStats, awards } from '@/lib/data/team';
+import { companyStats } from '@/lib/data/team';
 
 const values = [
   { icon: '🎯', title: 'Excellence', description: 'We never settle for "good enough". Every pixel, every line of code is crafted with precision.' },
@@ -78,7 +78,7 @@ export default function AboutStory() {
               Our <span className="gradient-text">Core Values</span>
             </h2>
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {values.map((v, i) => (
               <motion.div
                 key={v.title}
@@ -91,31 +91,6 @@ export default function AboutStory() {
                 <div className="text-3xl mb-3">{v.icon}</div>
                 <h4 className="font-heading font-bold text-[var(--foreground)] mb-2">{v.title}</h4>
                 <p className="text-[var(--muted)] text-sm">{v.description}</p>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Awards */}
-          <div className="text-center mb-8">
-            <h2 className="font-heading text-3xl font-bold text-[var(--foreground)] mb-2">
-              Awards & <span className="gradient-text">Recognition</span>
-            </h2>
-          </div>
-          <div className="flex flex-wrap justify-center gap-4">
-            {awards.map((award, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="glass-card px-6 py-4 flex items-center gap-3 card-hover"
-              >
-                <span className="text-2xl">{award.icon}</span>
-                <div>
-                  <div className="font-semibold text-sm text-[var(--foreground)]">{award.title}</div>
-                  <div className="text-xs text-[var(--muted)]">{award.org} · {award.year}</div>
-                </div>
               </motion.div>
             ))}
           </div>

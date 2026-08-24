@@ -1,85 +1,14 @@
-export const teamMembers = [
-  {
-    id: 1,
-    name: 'David Chen',
-    role: 'CEO & Founder',
-    bio: '15+ years in software engineering and entrepreneurship. Previously at Google and Stripe.',
-    avatar: '/images/team/david.jpg',
-    linkedin: 'https://linkedin.com/in/davidchen',
-    twitter: 'https://twitter.com/davidchen',
-    expertise: ['Strategy', 'Architecture', 'Leadership'],
-  },
-  {
-    id: 2,
-    name: 'Sarah Mitchell',
-    role: 'CTO',
-    bio: 'Full-stack architect with deep expertise in distributed systems, AI, and cloud infrastructure.',
-    avatar: '/images/team/sarah.jpg',
-    linkedin: 'https://linkedin.com/in/sarahmitchell',
-    twitter: 'https://twitter.com/sarahmitchell',
-    expertise: ['Cloud', 'AI/ML', 'System Design'],
-  },
-  {
-    id: 3,
-    name: 'Priya Sharma',
-    role: 'Head of Frontend',
-    bio: 'React expert and accessibility champion. Creator of 3 popular open-source projects.',
-    avatar: '/images/team/priya.jpg',
-    linkedin: 'https://linkedin.com/in/priyasharma',
-    twitter: 'https://twitter.com/priyasharma',
-    expertise: ['React', 'Next.js', 'UI/UX'],
-  },
-  {
-    id: 4,
-    name: 'Mohammed Ali',
-    role: 'Head of Backend',
-    bio: 'Python and distributed systems expert. Built backends serving 100M+ users.',
-    avatar: '/images/team/mohammed.jpg',
-    linkedin: 'https://linkedin.com/in/mohammedali',
-    twitter: 'https://twitter.com/mohammedali',
-    expertise: ['Python', 'Django', 'PostgreSQL'],
-  },
-  {
-    id: 5,
-    name: 'Sara Kim',
-    role: 'Lead UX Designer',
-    bio: 'Award-winning designer with a passion for creating delightful, inclusive user experiences.',
-    avatar: '/images/team/sara.jpg',
-    linkedin: 'https://linkedin.com/in/sarakim',
-    twitter: 'https://twitter.com/sarakim',
-    expertise: ['Figma', 'User Research', 'Design Systems'],
-  },
-  {
-    id: 6,
-    name: 'Alex Rivera',
-    role: 'AI/ML Engineer',
-    bio: 'Machine learning specialist with experience at OpenAI and Anthropic. PhD in Computer Science.',
-    avatar: '/images/team/alex.jpg',
-    linkedin: 'https://linkedin.com/in/alexrivera',
-    twitter: 'https://twitter.com/alexrivera',
-    expertise: ['PyTorch', 'LLMs', 'Computer Vision'],
-  },
-  {
-    id: 7,
-    name: 'Lisa Zhang',
-    role: 'Cloud Architect',
-    bio: 'AWS certified solutions architect with expertise in cost optimization and enterprise cloud migrations.',
-    avatar: '/images/team/lisa.jpg',
-    linkedin: 'https://linkedin.com/in/lisazhang',
-    twitter: 'https://twitter.com/lisazhang',
-    expertise: ['AWS', 'Kubernetes', 'Terraform'],
-  },
-  {
-    id: 8,
-    name: 'Tom Bradley',
-    role: 'SEO & Marketing Lead',
-    bio: 'Growth hacker who has helped 50+ companies rank on page 1. Expert in technical SEO and content strategy.',
-    avatar: '/images/team/tom.jpg',
-    linkedin: 'https://linkedin.com/in/tombradley',
-    twitter: 'https://twitter.com/tombradley',
-    expertise: ['SEO', 'Google Ads', 'Content Strategy'],
-  },
-];
+export const teamMembers: {
+  id: number;
+  name: string;
+  role: string;
+  bio: string;
+  avatar: string;
+  linkedin: string;
+  twitter: string;
+  expertise: string[];
+}[] = [];
+
 
 export const companyStats = [
   { label: 'Projects Delivered', value: '500+' },
@@ -90,13 +19,8 @@ export const companyStats = [
   { label: 'Client Satisfaction', value: '99%' },
 ];
 
-export const awards = [
-  { year: '2024', title: 'Best IT Company', org: 'TechAwards Global', icon: '🏆' },
-  { year: '2024', title: 'Top Developer Agency', org: 'Clutch.co', icon: '⭐' },
-  { year: '2023', title: 'Innovation Award', org: 'Forbes Tech', icon: '🚀' },
-  { year: '2023', title: 'Best Workplace', org: 'Great Place to Work', icon: '❤️' },
-  { year: '2022', title: 'AWS Partner of Year', org: 'Amazon Web Services', icon: '☁️' },
-];
+export const awards: { year: string; title: string; org: string; icon: string }[] = [];
+
 
 export const companyTimeline = [
   { year: '2014', title: 'Founded', description: 'TechVision was founded in San Francisco with a team of 3 passionate engineers.' },
