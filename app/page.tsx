@@ -10,13 +10,13 @@ import Testimonials from '@/components/home/Testimonials';
 import ContactCTA from '@/components/home/ContactCTA';
 
 export const metadata: Metadata = {
-  title: 'TechVision — Premium IT Services & Software Development Company',
+  title: 'TERVOM — Engineering Digital Success | Premium IT Services & Software Development',
   description:
-    'TechVision builds world-class web apps, mobile apps, AI solutions, and digital products for startups and enterprises. 500+ projects delivered. Get a free consultation.',
+    'TERVOM builds world-class web apps, mobile apps, AI solutions, and digital products for startups and enterprises. 500+ projects delivered. Get a free consultation.',
   openGraph: {
-    title: 'TechVision — Premium IT Services',
-    description: 'Build your digital future with TechVision. Web, Mobile, AI, Cloud & more.',
-    url: 'https://techvision.io',
+    title: 'TERVOM — Engineering Digital Success | Premium IT Services',
+    description: 'Build your digital future with TERVOM. Web, Mobile, AI, Cloud & more.',
+    url: 'https://tervom.com',
   },
 };
 

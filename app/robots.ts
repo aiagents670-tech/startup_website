@@ -6,9 +6,9 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/api/', '/_next/'],
+        disallow: ['/api/', '/_next/', '/admin/'],
       },
     ],
-    sitemap: 'https://techvision.io/sitemap.xml',
+    sitemap: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://tervom.com'}/sitemap.xml`,
   };
 }

@@ -5,8 +5,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Plus, Edit2, Trash2, Star } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { supabase } from '@/lib/supabase/client';
-import type { DbTestimonial } from '@/lib/supabase/types';
+import { db } from '@/lib/db';
+import type { DbTestimonial } from '@/lib/types/db';
 import AdminHeader from '@/components/admin/layout/AdminHeader';
 import AdminModal from '@/components/admin/ui/AdminModal';
 import AdminEmptyState from '@/components/admin/ui/AdminEmptyState';
@@ -19,8 +19,8 @@ export default function AdminTestimonialsPage() {
 
   const fetch = async () => {
     setLoading(true);
-    const { data } = await supabase.from('testimonials').select('*').order('display_order');
-    if (data) setItems(data as DbTestimonial[]);
+    const data = await db.getTestimonials();
+    setItems(data);
     setLoading(false);
   };
 
@@ -29,14 +29,15 @@ export default function AdminTestimonialsPage() {
   const handleDelete = async () => {
     if (!deleteTarget) return;
     setDeleting(true);
-    const { error } = await supabase.from('testimonials').delete().eq('id', deleteTarget.id);
+    await db.deleteTestimonial(deleteTarget.id);
     setDeleting(false);
-    if (error) toast.error('Delete failed');
-    else { toast.success('Deleted'); setDeleteTarget(null); fetch(); }
+    toast.success('Deleted');
+    setDeleteTarget(null);
+    fetch();
   };
 
   const toggleActive = async (item: DbTestimonial) => {
-    await supabase.from('testimonials').update({ is_active: !item.is_active }).eq('id', item.id);
+    await db.saveTestimonial({ id: item.id, is_active: !item.is_active });
     toast.success(item.is_active ? 'Hidden' : 'Shown');
     fetch();
   };

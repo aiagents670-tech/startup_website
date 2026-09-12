@@ -1,13 +1,46 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { ArrowRight, Sparkles } from 'lucide-react';
-import { services } from '@/lib/data/services';
-
-
+import { services as staticServices } from '@/lib/data/services';
+import { db } from '@/lib/db';
+import type { DbService } from '@/lib/types/db';
 
 export default function Services() {
+  const [activeServices, setActiveServices] = useState<any[]>(staticServices);
+
+  useEffect(() => {
+    async function load() {
+      try {
+        const live = await db.getServices();
+        if (live && live.length > 0) {
+          const formatted = live
+            .filter((s) => s.is_active !== false)
+            .map((s) => ({
+              slug: s.slug || s.name.toLowerCase().replace(/\s+/g, '-'),
+              icon: s.icon || '🌐',
+              title: s.name,
+              description: s.short_description,
+              features: s.features || [],
+              color: s.color || 'from-blue-500 to-cyan-500',
+              bg: s.bg || 'bg-blue-500/10',
+            }));
+          if (formatted.length > 0) setActiveServices(formatted);
+        }
+      } catch (err) {
+        console.error('Error loading live services:', err);
+      }
+    }
+    load();
+    window.addEventListener('tervom_db_updated', load);
+    window.addEventListener('storage', load);
+    return () => {
+      window.removeEventListener('tervom_db_updated', load);
+      window.removeEventListener('storage', load);
+    };
+  }, []);
   return (
     <section id="services" className="section-padding" aria-label="Our services">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -48,7 +81,7 @@ export default function Services() {
 
         {/* Services Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-          {services.map((service, i) => {
+          {activeServices.map((service, i) => {
             const contactHref = `/contact?service=${encodeURIComponent(service.title)}`;
 
             return (
@@ -114,7 +147,7 @@ export default function Services() {
 
                     {/* Feature pills */}
                     <div className="flex flex-wrap gap-1.5 mb-5">
-                      {service.features.slice(0, 3).map((feature) => (
+                      {service.features.slice(0, 3).map((feature: string) => (
                         <span
                           key={feature}
                           className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${service.bg} text-[var(--muted)] border border-[var(--border)] group-hover:border-transparent transition-colors`}

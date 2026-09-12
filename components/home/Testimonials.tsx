@@ -1,21 +1,55 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
-import { testimonials } from '@/lib/data/testimonials';
+import { testimonials as staticTestimonials } from '@/lib/data/testimonials';
+import { db } from '@/lib/db';
 
 export default function Testimonials() {
+  const [list, setList] = useState<any[]>(staticTestimonials);
   const [current, setCurrent] = useState(0);
 
-  const prev = () => setCurrent((c) => (c - 1 + testimonials.length) % testimonials.length);
-  const next = () => setCurrent((c) => (c + 1) % testimonials.length);
+  useEffect(() => {
+    async function load() {
+      try {
+        const live = await db.getTestimonials();
+        if (live && live.length > 0) {
+          const formatted = live
+            .filter((t) => t.is_active !== false)
+            .map((t) => ({
+              id: t.id,
+              name: t.client_name,
+              role: t.position || 'Client',
+              company: t.company,
+              rating: t.rating || 5,
+              review: t.review,
+              project: t.project || 'Project',
+            }));
+          if (formatted.length > 0) setList(formatted);
+        }
+      } catch (err) {
+        console.error('Error loading live testimonials:', err);
+      }
+    }
+    load();
+    window.addEventListener('tervom_db_updated', load);
+    window.addEventListener('storage', load);
+    return () => {
+      window.removeEventListener('tervom_db_updated', load);
+      window.removeEventListener('storage', load);
+    };
+  }, []);
+
+  const total = list.length;
+  const prev = () => setCurrent((c) => (c - 1 + total) % total);
+  const next = () => setCurrent((c) => (c + 1) % total);
 
   const visible = [
-    testimonials[(current - 1 + testimonials.length) % testimonials.length],
-    testimonials[current],
-    testimonials[(current + 1) % testimonials.length],
-  ];
+    list[(current - 1 + total) % total],
+    list[current % total],
+    list[(current + 1) % total],
+  ].filter(Boolean);
 
   return (
     <section id="testimonials" className="section-padding bg-[var(--surface)]" aria-label="Client testimonials">
@@ -99,7 +133,7 @@ export default function Testimonials() {
 
             {/* Dots */}
             <div className="flex gap-2">
-              {testimonials.map((_, i) => (
+              {list.map((_, i) => (
                 <button
                   key={i}
                   onClick={() => setCurrent(i)}

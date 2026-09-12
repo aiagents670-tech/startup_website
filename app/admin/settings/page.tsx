@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Loader2, Save } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { supabase } from '@/lib/supabase/client';
+import { db } from '@/lib/db';
 import AdminHeader from '@/components/admin/layout/AdminHeader';
 import ImageUpload from '@/components/admin/ui/ImageUpload';
 
@@ -38,14 +38,12 @@ export default function AdminSettingsPage() {
   useEffect(() => {
     async function loadSettings() {
       setLoading(true);
-      const { data } = await supabase.from('settings').select('key, value');
-      if (data) {
-        const map: Record<string, string> = {};
-        data.forEach(({ key, value }) => {
-          map[key] = typeof value === 'string' ? value.replace(/^"|"$/g, '') : String(value ?? '');
-        });
-        setSettings(map);
-      }
+      const data = await db.getSettings();
+      const map: Record<string, string> = {};
+      data.forEach(({ key, value }) => {
+        map[key] = typeof value === 'string' ? value : String(value ?? '');
+      });
+      setSettings(map);
       setLoading(false);
     }
     loadSettings();
@@ -54,16 +52,12 @@ export default function AdminSettingsPage() {
   const handleSave = async () => {
     setSaving(true);
     try {
-      const upserts = SETTING_KEYS.map(key => ({
-        key,
-        value: JSON.stringify(settings[key] ?? ''),
-        updated_at: new Date().toISOString(),
-      }));
-      const { error } = await supabase.from('settings').upsert(upserts, { onConflict: 'key' });
-      if (error) throw error;
+      await Promise.all(
+        SETTING_KEYS.map((key) => db.saveSetting(key, settings[key] ?? ''))
+      );
       toast.success('Settings saved!');
     } catch (err: unknown) {
-      toast.error(err instanceof Error ? err.message : 'Failed to save.');
+      toast.error(err instanceof Error ? err.message : 'Failed to save settings.');
     } finally {
       setSaving(false);
     }
@@ -91,7 +85,7 @@ export default function AdminSettingsPage() {
         {/* Logo */}
         <div className="rounded-2xl border border-white/8 bg-white/[0.02] p-5">
           <h3 className="text-sm font-semibold text-slate-300 mb-4">Company Logo</h3>
-          <ImageUpload value={logoUrl} onChange={setLogoUrl} bucket="company-assets" folder="logos" label="Logo (replaces current logo)" />
+          <ImageUpload value={logoUrl} onChange={setLogoUrl} label="Logo (replaces current logo)" />
         </div>
 
         {/* Setting Groups */}

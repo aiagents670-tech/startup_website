@@ -4,7 +4,7 @@ import { portfolioProjects } from '@/lib/data/portfolio';
 import { blogPosts } from '@/lib/data/blog';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://techvision.io';
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tervom.com';
   const now = new Date();
 
   const staticRoutes: MetadataRoute.Sitemap = [

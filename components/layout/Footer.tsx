@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import NewsletterForm from './NewsletterForm';
-import { Mail, Phone } from 'lucide-react';
+import { Mail, Phone, Lock } from 'lucide-react';
 import { FaTwitter, FaLinkedin, FaGithub, FaInstagram, FaYoutube } from 'react-icons/fa';
 
 const footerLinks = {
@@ -32,6 +32,7 @@ const footerLinks = {
     { label: 'Terms of Service', href: '/terms' },
     { label: 'Cookie Policy', href: '/cookies' },
     { label: 'Sitemap', href: '/sitemap.xml' },
+    { label: 'Admin Portal', href: '/admin/login' },
   ],
 };
 
@@ -126,8 +127,9 @@ export default function Footer() {
                   <li key={link.label}>
                     <Link
                       href={link.href}
-                      className="text-[var(--muted)] hover:text-primary-500 text-sm transition-colors"
+                      className="text-[var(--muted)] hover:text-primary-500 text-sm transition-colors flex items-center gap-1.5"
                     >
+                      {link.label === 'Admin Portal' && <Lock size={12} className="text-primary-400" />}
                       {link.label}
                     </Link>
                   </li>
@@ -138,10 +140,20 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="py-6 border-t border-[var(--border)] flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-[var(--muted)] text-sm">
-            © {new Date().getFullYear()} TERVOM. All rights reserved. Code. Innovate. Elevate.
-          </p>
+        <div className="py-6 border-t border-[var(--border)] flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex flex-wrap items-center gap-4 text-center md:text-left">
+            <p className="text-[var(--muted)] text-sm">
+              © {new Date().getFullYear()} TERVOM. All rights reserved. Code. Innovate. Elevate.
+            </p>
+            <Link
+              href="/admin/login"
+              id="footer-admin-login-btn"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary-500/10 hover:bg-primary-500/20 text-primary-400 hover:text-primary-300 text-xs font-semibold border border-primary-500/20 transition-all hover:scale-105 active:scale-95 shadow-sm"
+            >
+              <Lock size={12} />
+              Admin Login
+            </Link>
+          </div>
           <div className="flex items-center gap-3">
             {socialLinks.map(({ icon: Icon, href, label }) => (
               <a

@@ -8,7 +8,6 @@ import {
   LayoutDashboard, Wrench, Briefcase, BookOpen, MessageSquare,
   Star, Settings, LogOut, ChevronLeft, ChevronRight, Menu, X
 } from 'lucide-react';
-import { supabase } from '@/lib/supabase/client';
 
 const navItems = [
   { label: 'Dashboard',   href: '/admin',              icon: LayoutDashboard },
@@ -27,7 +26,7 @@ export default function AdminSidebar() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
+    document.cookie = 'admin-session=; path=/; max-age=0';
     router.push('/admin/login');
   };
 

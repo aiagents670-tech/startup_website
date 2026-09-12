@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'Privacy Policy',
-  description: 'TechVision Privacy Policy — how we collect, use, and protect your personal information.',
+  description: 'TERVOM Privacy Policy — how we collect, use, and protect your personal information.',
 };
 
 export default function PrivacyPage() {
@@ -30,11 +30,11 @@ export default function PrivacyPage() {
     },
     {
       title: 'Your Rights',
-      content: 'You have the right to access, update, or delete your personal information. You may also opt out of marketing communications at any time. To exercise these rights, please contact us at privacy@techvision.io.',
+      content: 'You have the right to access, update, or delete your personal information. You may also opt out of marketing communications at any time. To exercise these rights, please contact us at privacy@tervom.com.',
     },
     {
       title: 'Contact Us',
-      content: 'If you have questions about this Privacy Policy, please contact us at: privacy@techvision.io.',
+      content: 'If you have questions about this Privacy Policy, please contact us at: privacy@tervom.com.',
     },
   ];
 

@@ -2,9 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
-import BackToTop from "@/components/ui/BackToTop";
+import AppShell from "@/components/layout/AppShell";
 
 import Script from "next/script";
 import { Toaster } from 'react-hot-toast';
@@ -129,10 +127,7 @@ export default function RootLayout({
       <body className="min-h-screen bg-[var(--background)] text-[var(--foreground)] antialiased">
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           <Toaster position="top-right" toastOptions={{ style: { background: '#0d1526', color: '#f1f5f9', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', fontSize: '14px' }, success: { iconTheme: { primary: '#22d3ee', secondary: '#0d1526' } }, error: { iconTheme: { primary: '#f87171', secondary: '#0d1526' } } }} />
-          <Navbar />
-          <main>{children}</main>
-          <Footer />
-          <BackToTop />
+          <AppShell>{children}</AppShell>
         </ThemeProvider>
       </body>
     </html>

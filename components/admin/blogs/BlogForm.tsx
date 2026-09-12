@@ -12,20 +12,21 @@ import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
 import Link from '@tiptap/extension-link';
 import Placeholder from '@tiptap/extension-placeholder';
-import { supabase } from '@/lib/supabase/client';
+import { db } from '@/lib/db';
 import ImageUpload from '@/components/admin/ui/ImageUpload';
-import type { DbBlog } from '@/lib/supabase/types';
+import type { DbBlog } from '@/lib/types/db';
 
 const schema = z.object({
-  title:             z.string().min(3, 'Title required'),
-  slug:              z.string().min(2, 'Slug required').regex(/^[a-z0-9-]+$/),
-  author:            z.string().default('TERVOM Team'),
+  title:             z.string().min(3, 'Title is required (min 3 chars)'),
+  slug:              z.string().min(2, 'Slug is required').regex(/^[a-z0-9-]+$/, 'Slug can only contain lowercase letters, numbers and hyphens'),
+  author:            z.string().min(1, 'Author is required'),
   category:          z.string().optional(),
-  reading_time:      z.coerce.number().int().min(1).default(5),
-  short_description: z.string().min(10, 'Summary required'),
+  reading_time:      z.coerce.number().int().min(1, 'Reading time must be at least 1 min'),
+  short_description: z.string().min(10, 'Summary is required (min 10 chars)'),
   seo_title:         z.string().optional(),
   seo_description:   z.string().optional(),
-  status:            z.enum(['draft', 'published']).default('draft'),
+  status:            z.enum(['draft', 'published']),
+  published_at:      z.string().optional(),
 });
 
 type FormValues = z.infer<typeof schema>;
@@ -53,7 +54,11 @@ export default function BlogForm({ blog }: { blog?: DbBlog }) {
     },
   });
 
-  const { register, handleSubmit, setValue, formState: { errors } } = useForm<FormValues>({
+  const defaultPublishedAt = blog?.published_at
+    ? new Date(blog.published_at).toISOString().slice(0, 16)
+    : '';
+
+  const { register, handleSubmit, setValue, reset, formState: { errors } } = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
       title:             blog?.title ?? '',
@@ -65,6 +70,7 @@ export default function BlogForm({ blog }: { blog?: DbBlog }) {
       seo_title:         blog?.seo_title ?? '',
       seo_description:   blog?.seo_description ?? '',
       status:            (blog?.status as 'draft' | 'published') ?? 'draft',
+      published_at:      defaultPublishedAt,
     },
   });
 
@@ -80,20 +86,48 @@ export default function BlogForm({ blog }: { blog?: DbBlog }) {
     }
   };
 
+  const handleCancel = () => {
+    if (isEdit && blog) {
+      // Reset form to original blog values
+      reset({
+        title:             blog.title,
+        slug:              blog.slug,
+        author:            blog.author,
+        category:          blog.category ?? '',
+        reading_time:      blog.reading_time ?? 5,
+        short_description: blog.short_description,
+        seo_title:         blog.seo_title ?? '',
+        seo_description:   blog.seo_description ?? '',
+        status:            blog.status,
+        published_at:      defaultPublishedAt,
+      });
+      setImageUrl(blog.image_url ?? null);
+      setTags(blog.tags ?? []);
+      editor?.commands.setContent(blog.content || '');
+    }
+    router.push('/admin/blogs');
+  };
+
   const onSubmit = async (data: FormValues) => {
     setSaving(true);
     try {
       const content = editor?.getHTML() || '';
-      const payload = { ...data, image_url: imageUrl, tags, content, published_at: data.status === 'published' ? new Date().toISOString() : null };
-      if (isEdit) {
-        const { error } = await supabase.from('blogs').update(payload).eq('id', blog.id);
-        if (error) throw error;
-        toast.success('Blog updated!');
-      } else {
-        const { error } = await supabase.from('blogs').insert([payload]);
-        if (error) throw error;
-        toast.success('Blog created!');
-      }
+      const now = new Date().toISOString();
+      // If publishing and no published_at date is set, default to now
+      const published_at = data.status === 'published'
+        ? (data.published_at ? new Date(data.published_at).toISOString() : now)
+        : null;
+
+      const payload = {
+        ...data,
+        id: blog?.id,
+        image_url: imageUrl,
+        tags,
+        content,
+        published_at,
+      };
+      await db.saveBlog(payload);
+      toast.success(isEdit ? 'Blog updated successfully' : 'Blog created successfully');
       router.push('/admin/blogs');
       router.refresh();
     } catch (err: unknown) {
@@ -124,8 +158,9 @@ export default function BlogForm({ blog }: { blog?: DbBlog }) {
             {errors.slug && <p className="text-red-400 text-xs mt-1">{errors.slug.message}</p>}
           </div>
           <div>
-            <label className={labelClass}>Author</label>
+            <label className={labelClass}>Author *</label>
             <input {...register('author')} className={inputClass} />
+            {errors.author && <p className="text-red-400 text-xs mt-1">{errors.author.message}</p>}
           </div>
           <div>
             <label className={labelClass}>Category</label>
@@ -134,6 +169,23 @@ export default function BlogForm({ blog }: { blog?: DbBlog }) {
           <div>
             <label className={labelClass}>Reading Time (min)</label>
             <input type="number" {...register('reading_time')} className={inputClass} min={1} />
+            {errors.reading_time && <p className="text-red-400 text-xs mt-1">{errors.reading_time.message}</p>}
+          </div>
+          <div>
+            <label className={labelClass}>Publish Date</label>
+            <input
+              type="datetime-local"
+              {...register('published_at')}
+              className={`${inputClass} [color-scheme:dark]`}
+            />
+            <p className="text-slate-600 text-[10px] mt-1">Leave empty to use current time when publishing</p>
+          </div>
+          <div>
+            <label className={labelClass}>Status</label>
+            <select {...register('status')} className={`${inputClass} cursor-pointer`}>
+              <option value="draft" className="bg-[#0d1526]">Draft</option>
+              <option value="published" className="bg-[#0d1526]">Published</option>
+            </select>
           </div>
         </div>
         <div>
@@ -146,7 +198,7 @@ export default function BlogForm({ blog }: { blog?: DbBlog }) {
       {/* Featured Image */}
       <div className="rounded-2xl border border-white/8 bg-white/[0.02] p-5">
         <h3 className="text-sm font-semibold text-slate-300 mb-4">Featured Image</h3>
-        <ImageUpload value={imageUrl} onChange={setImageUrl} bucket="blog-images" folder="blogs" label="Featured Image" />
+        <ImageUpload value={imageUrl} onChange={setImageUrl} label="Featured Image" />
       </div>
 
       {/* Content Editor */}
@@ -196,15 +248,29 @@ export default function BlogForm({ blog }: { blog?: DbBlog }) {
       </div>
 
       {/* Publish */}
-      <div className="flex items-center gap-3">
-        <button type="submit" onClick={() => setValue('status', 'published')} disabled={saving} className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-pink-600 to-rose-500 text-white font-semibold text-sm hover:opacity-90 transition-all disabled:opacity-50">
+      <div className="flex items-center gap-3 flex-wrap">
+        <button
+          type="submit"
+          onClick={() => setValue('status', 'published')}
+          disabled={saving}
+          className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-pink-600 to-rose-500 text-white font-semibold text-sm hover:opacity-90 transition-all disabled:opacity-50"
+        >
           {saving && <Loader2 size={16} className="animate-spin" />}
-          {isEdit ? 'Update & Publish' : 'Publish'}
+          {isEdit ? 'Update & Publish' : 'Publish Blog'}
         </button>
-        <button type="submit" onClick={() => setValue('status', 'draft')} disabled={saving} className="px-6 py-2.5 rounded-xl border border-white/10 text-slate-400 hover:text-white text-sm transition-colors disabled:opacity-50">
+        <button
+          type="submit"
+          onClick={() => setValue('status', 'draft')}
+          disabled={saving}
+          className="px-6 py-2.5 rounded-xl border border-white/10 text-slate-400 hover:text-white text-sm transition-colors disabled:opacity-50"
+        >
           Save as Draft
         </button>
-        <button type="button" onClick={() => router.push('/admin/blogs')} className="px-4 py-2.5 text-sm text-slate-500 hover:text-white transition-colors">
+        <button
+          type="button"
+          onClick={handleCancel}
+          className="px-4 py-2.5 text-sm text-slate-500 hover:text-white transition-colors"
+        >
           Cancel
         </button>
       </div>

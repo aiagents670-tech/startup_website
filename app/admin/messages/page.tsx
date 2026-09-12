@@ -4,8 +4,8 @@ import { useState, useEffect, useCallback } from 'react';
 import { Search, Trash2, Mail, Download, Eye, EyeOff } from 'lucide-react';
 import { format } from 'date-fns';
 import toast from 'react-hot-toast';
-import { supabase } from '@/lib/supabase/client';
-import type { DbContactMessage } from '@/lib/supabase/types';
+import { db } from '@/lib/db';
+import type { DbContactMessage } from '@/lib/types/db';
 import AdminHeader from '@/components/admin/layout/AdminHeader';
 import AdminModal from '@/components/admin/ui/AdminModal';
 import AdminEmptyState from '@/components/admin/ui/AdminEmptyState';
@@ -20,8 +20,8 @@ export default function AdminMessagesPage() {
 
   const fetch = useCallback(async () => {
     setLoading(true);
-    const { data } = await supabase.from('contact_submissions').select('*').order('created_at', { ascending: false });
-    if (data) setMessages(data as DbContactMessage[]);
+    const data = await db.getMessages();
+    setMessages(data);
     setLoading(false);
   }, []);
 
@@ -34,17 +34,19 @@ export default function AdminMessagesPage() {
   );
 
   const markRead = async (msg: DbContactMessage) => {
-    await supabase.from('contact_submissions').update({ is_read: !msg.is_read }).eq('id', msg.id);
+    await db.markMessageRead(msg.id, !msg.is_read);
     fetch();
   };
 
   const handleDelete = async () => {
     if (!deleteTarget) return;
     setDeleting(true);
-    const { error } = await supabase.from('contact_submissions').delete().eq('id', deleteTarget.id);
+    await db.deleteMessage(deleteTarget.id);
     setDeleting(false);
-    if (error) toast.error('Delete failed');
-    else { toast.success('Message deleted'); setDeleteTarget(null); if (selected?.id === deleteTarget.id) setSelected(null); fetch(); }
+    toast.success('Message deleted');
+    setDeleteTarget(null);
+    if (selected?.id === deleteTarget.id) setSelected(null);
+    fetch();
   };
 
   const exportCSV = () => {

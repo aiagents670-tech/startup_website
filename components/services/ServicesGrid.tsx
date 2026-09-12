@@ -1,8 +1,10 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
+import { db } from '@/lib/db';
 
 interface Service {
   slug: string;
@@ -14,12 +16,44 @@ interface Service {
   bg: string;
 }
 
-export default function ServicesGrid({ services }: { services: Service[] }) {
+export default function ServicesGrid({ services: initialServices }: { services: Service[] }) {
+  const [servicesList, setServicesList] = useState<Service[]>(initialServices);
+
+  useEffect(() => {
+    async function load() {
+      try {
+        const live = await db.getServices();
+        if (live && live.length > 0) {
+          const formatted = live
+            .filter((s) => s.is_active !== false)
+            .map((s) => ({
+              slug: s.slug || s.name.toLowerCase().replace(/\s+/g, '-'),
+              icon: s.icon || '🌐',
+              title: s.name,
+              description: s.short_description,
+              features: s.features || [],
+              color: s.color || 'from-blue-500 to-cyan-500',
+              bg: s.bg || 'bg-blue-500/10',
+            }));
+          if (formatted.length > 0) setServicesList(formatted);
+        }
+      } catch (err) {
+        console.error('Error loading live services grid:', err);
+      }
+    }
+    load();
+    window.addEventListener('tervom_db_updated', load);
+    window.addEventListener('storage', load);
+    return () => {
+      window.removeEventListener('tervom_db_updated', load);
+      window.removeEventListener('storage', load);
+    };
+  }, []);
   return (
     <section className="section-padding bg-[var(--surface)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {services.map((service, i) => {
+          {servicesList.map((service, i) => {
             const contactHref = `/contact?service=${encodeURIComponent(service.title)}`;
             return (
               <motion.div

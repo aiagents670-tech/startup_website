@@ -149,68 +149,94 @@ export default function Hero() {
 
           {/* Right — Illustration */}
           <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            animate={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="relative hidden lg:block"
+            className="relative mt-8 lg:mt-0 max-w-xl lg:max-w-none mx-auto lg:mx-0"
           >
-            {/* Main card */}
-            <div className="relative">
+            {/* Ambient Background Glow Halo */}
+            <div className="absolute -inset-4 bg-gradient-to-r from-blue-600/30 via-cyan-500/20 to-purple-600/30 rounded-3xl blur-2xl animate-pulse pointer-events-none" />
+
+            {/* Main Animated Card Container */}
+            <div className="relative group">
               <div className="animate-float">
-                <div className="glass-card p-2 relative rounded-3xl overflow-hidden border border-[var(--border)] shadow-2xl">
+                <div className="glass-card p-2.5 relative rounded-3xl overflow-hidden border border-primary-500/30 shadow-[0_20px_60px_rgba(10,82,204,0.3)] transition-all duration-500 group-hover:border-cyan-400/60 group-hover:shadow-[0_25px_75px_rgba(34,211,238,0.35)]">
+                  
+                  {/* Glowing Sweep Sheen Animation Overlay */}
+                  <div className="absolute inset-0 pointer-events-none overflow-hidden z-20">
+                    <div className="absolute -inset-full top-0 h-full w-1/2 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12 translate-x-[-200%] group-hover:translate-x-[400%] transition-transform duration-1000 ease-in-out" />
+                  </div>
+
                   <Image
                     src="/hero-workspace.png"
-                    alt="TERVOM — Engineering Digital Solutions"
-                    width={800}
-                    height={550}
+                    alt="TERVOM — Engineering Digital Solutions & Cloud Architecture"
+                    width={900}
+                    height={600}
                     priority
-                    className="w-full h-auto rounded-2xl object-cover"
+                    className="w-full h-auto rounded-2xl object-cover transform transition-transform duration-700 ease-out group-hover:scale-[1.02]"
                   />
                 </div>
               </div>
 
-              {/* Floating badges */}
+              {/* Floating Badge 1 — Cloud Architecture (Top Right) */}
               <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.8 }}
-                className="absolute -top-6 -right-6 glass-card px-4 py-3 flex items-center gap-3"
+                initial={{ opacity: 0, y: -20, scale: 0.8 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ delay: 0.7 }}
+                className="absolute -top-5 -right-5 glass-card px-4 py-3 flex items-center gap-3 border border-cyan-500/40 shadow-[0_10px_30px_rgba(34,211,238,0.2)] bg-[#091326]/90 backdrop-blur-md z-30"
               >
-                <div className="w-10 h-10 rounded-xl bg-green-500/20 flex items-center justify-center">
-                  <span className="text-xl">✅</span>
+                <div className="w-10 h-10 rounded-xl bg-cyan-500/20 border border-cyan-500/30 flex items-center justify-center flex-shrink-0">
+                  <span className="text-xl animate-pulse">☁️</span>
                 </div>
                 <div>
-                  <div className="text-xs font-semibold text-[var(--foreground)]">Project Delivered</div>
-                  <div className="text-xs text-[var(--muted)]">On time & on budget</div>
+                  <div className="text-xs font-bold text-white flex items-center gap-1.5">
+                    Cloud Native & AI
+                    <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
+                  </div>
+                  <div className="text-[11px] text-cyan-300 font-medium">99.99% Uptime & Speed</div>
                 </div>
               </motion.div>
 
+              {/* Floating Badge 2 — Enterprise Security (Bottom Left) */}
               <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 1.0 }}
-                className="absolute -bottom-6 -left-6 glass-card px-4 py-3 flex items-center gap-3"
+                initial={{ opacity: 0, y: 20, scale: 0.8 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ delay: 0.9 }}
+                className="absolute -bottom-5 -left-5 glass-card px-4 py-3 flex items-center gap-3 border border-indigo-500/40 shadow-[0_10px_30px_rgba(99,102,241,0.2)] bg-[#091326]/90 backdrop-blur-md z-30"
               >
-                <div className="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center">
-                  <span className="text-xl">⭐</span>
+                <div className="w-10 h-10 rounded-xl bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center flex-shrink-0">
+                  <span className="text-xl">🛡️</span>
                 </div>
                 <div>
-                  <div className="text-xs font-semibold text-[var(--foreground)]">5-Star Rated</div>
-                  <div className="text-xs text-[var(--muted)]">300+ client reviews</div>
+                  <div className="text-xs font-bold text-white">Enterprise Security</div>
+                  <div className="text-[11px] text-indigo-300 font-medium">End-to-End Encrypted</div>
                 </div>
               </motion.div>
 
+              {/* Floating Badge 3 — Tech Stack Badges (Middle Right) */}
               <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 1.2 }}
-                className="absolute top-1/2 -right-16 transform -translate-y-1/2 glass-card px-4 py-3"
+                initial={{ opacity: 0, x: 20, scale: 0.8 }}
+                animate={{ opacity: 1, x: 0, scale: 1 }}
+                transition={{ delay: 1.1 }}
+                className="absolute top-1/2 -right-8 transform -translate-y-1/2 glass-card px-4 py-3 border border-purple-500/40 bg-[#091326]/90 backdrop-blur-md shadow-lg z-30"
               >
-                <div className="text-xs font-semibold text-[var(--foreground)] mb-1">Tech Stack</div>
+                <div className="text-[11px] font-bold text-slate-300 mb-1.5 uppercase tracking-wider flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-pulse" />
+                  Engineered Stack
+                </div>
                 <div className="flex gap-1.5">
-                  {['⚛️', '🐍', '☁️', '🤖'].map((emoji, i) => (
-                    <div key={i} className="w-7 h-7 rounded-lg bg-[var(--surface-2)] flex items-center justify-center text-sm">
-                      {emoji}
+                  {[
+                    { label: 'React / Next.js', emoji: '⚛️' },
+                    { label: 'Python / AI', emoji: '🐍' },
+                    { label: 'Cloud Architecture', emoji: '☁️' },
+                    { label: 'High-speed DB', emoji: '💾' },
+                  ].map((tech, i) => (
+                    <div
+                      key={i}
+                      title={tech.label}
+                      className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-sm hover:scale-110 hover:border-purple-400/50 transition-all cursor-pointer"
+                    >
+                      {tech.emoji}
                     </div>
                   ))}
                 </div>

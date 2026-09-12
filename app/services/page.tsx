@@ -6,7 +6,7 @@ import ContactCTA from '@/components/home/ContactCTA';
 export const metadata: Metadata = {
   title: 'IT Services',
   description:
-    'Explore TechVision\'s full range of IT services: Web Development, Mobile Apps, AI Solutions, Cloud Computing, UI/UX Design, SEO, Digital Marketing, and more.',
+    "Explore TERVOM's full range of IT services: Web Development, Mobile Apps, AI Solutions, Cloud Computing, UI/UX Design, SEO, Digital Marketing, and more.",
 };
 
 export default function ServicesPage() {

@@ -5,7 +5,7 @@ import ContactCTA from '@/components/home/ContactCTA';
 export const metadata: Metadata = {
   title: 'Portfolio',
   description:
-    'Explore TechVision\'s portfolio of 500+ successful projects spanning web development, mobile apps, AI solutions, ERP, CRM, and ecommerce platforms.',
+    "Explore TERVOM's portfolio of 500+ successful projects spanning web development, mobile apps, AI solutions, ERP, CRM, and ecommerce platforms.",
 };
 
 export default function PortfolioPage() {

@@ -1,22 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { Bell, User } from 'lucide-react';
-import { supabase } from '@/lib/supabase/client';
 
 interface AdminHeaderProps {
   title?: string;
 }
 
 export default function AdminHeader({ title = 'Dashboard' }: AdminHeaderProps) {
-  const [userEmail, setUserEmail] = useState('');
-
-  useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => {
-      setUserEmail(data.user?.email || '');
-    });
-  }, []);
-
   return (
     <header className="h-14 border-b border-white/8 bg-[#060b14]/80 backdrop-blur-xl flex items-center justify-between px-6 flex-shrink-0">
       <h1 className="font-heading font-bold text-white text-lg">{title}</h1>
@@ -32,7 +22,7 @@ export default function AdminHeader({ title = 'Dashboard' }: AdminHeaderProps) {
             <User size={14} className="text-white" />
           </div>
           <span className="text-xs text-slate-400 hidden sm:block truncate max-w-[120px]">
-            {userEmail || 'Admin'}
+            Admin
           </span>
         </div>
       </div>

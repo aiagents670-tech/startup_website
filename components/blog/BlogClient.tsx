@@ -1,10 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { Clock, ArrowRight, Calendar } from 'lucide-react';
-import { blogPosts, blogCategories } from '@/lib/data/blog';
+import { blogPosts as staticPosts, blogCategories } from '@/lib/data/blog';
+import { db } from '@/lib/db';
 
 const categoryColors: Record<string, string> = {
   AI: 'from-cyan-500 to-blue-500',
@@ -20,12 +21,47 @@ const categoryColors: Record<string, string> = {
 
 export default function BlogClient() {
   const [activeCategory, setActiveCategory] = useState('All');
+  const [postsList, setPostsList] = useState<any[]>(staticPosts);
+
+  useEffect(() => {
+    async function load() {
+      try {
+        const live = await db.getBlogs();
+        if (live && live.length > 0) {
+          const formatted = live
+            .filter((b) => b.status === 'published')
+            .map((b) => ({
+              id: b.id,
+              slug: b.slug || b.title.toLowerCase().replace(/\s+/g, '-'),
+              title: b.title,
+              excerpt: b.short_description,
+              category: b.category || 'Engineering',
+              author: { name: b.author || 'TERVOM Team', role: 'Engineering' },
+              date: (b.published_at || b.created_at || '').substring(0, 10),
+              readTime: `${b.reading_time || 5} min read`,
+              tags: b.tags || [],
+              featured: true,
+            }));
+          if (formatted.length > 0) setPostsList(formatted);
+        }
+      } catch (err) {
+        console.error('Error loading live blog list:', err);
+      }
+    }
+    load();
+    window.addEventListener('tervom_db_updated', load);
+    window.addEventListener('storage', load);
+    return () => {
+      window.removeEventListener('tervom_db_updated', load);
+      window.removeEventListener('storage', load);
+    };
+  }, []);
 
   const filtered = activeCategory === 'All'
-    ? blogPosts
-    : blogPosts.filter((p) => p.category === activeCategory || p.tags.includes(activeCategory));
+    ? postsList
+    : postsList.filter((p) => p.category === activeCategory || p.tags.includes(activeCategory));
 
-  const featured = blogPosts.filter((p) => p.featured);
+  const featured = postsList.filter((p) => p.featured);
 
   return (
     <section className="section-padding bg-[var(--surface)]">

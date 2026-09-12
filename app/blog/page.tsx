@@ -5,7 +5,7 @@ import ContactCTA from '@/components/home/ContactCTA';
 export const metadata: Metadata = {
   title: 'Blog',
   description:
-    'TechVision blog — insights on web development, AI, cloud computing, mobile apps, SEO, and digital transformation for businesses.',
+    'TERVOM blog — insights on web development, AI, cloud computing, mobile apps, SEO, and digital transformation for businesses.',
 };
 
 export default function BlogPage() {

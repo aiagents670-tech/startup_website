@@ -7,19 +7,19 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Loader2, Star } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { supabase } from '@/lib/supabase/client';
+import { db } from '@/lib/db';
 import ImageUpload from '@/components/admin/ui/ImageUpload';
-import type { DbTestimonial } from '@/lib/supabase/types';
+import type { DbTestimonial } from '@/lib/types/db';
 
 const schema = z.object({
   client_name: z.string().min(2, 'Name required'),
   company:     z.string().min(1, 'Company required'),
   position:    z.string().min(1, 'Position required'),
   review:      z.string().min(20, 'Review required'),
-  rating:      z.coerce.number().int().min(1).max(5).default(5),
+  rating:      z.coerce.number().int().min(1).max(5),
   project:     z.string().optional(),
-  is_featured: z.boolean().default(false),
-  is_active:   z.boolean().default(true),
+  is_featured: z.boolean(),
+  is_active:   z.boolean(),
 });
 
 type FormValues = z.infer<typeof schema>;
@@ -50,20 +50,17 @@ export default function TestimonialForm({ testimonial }: { testimonial?: DbTesti
   const onSubmit = async (data: FormValues) => {
     setSaving(true);
     try {
-      const payload = { ...data, image_url: imageUrl };
-      if (isEdit) {
-        const { error } = await supabase.from('testimonials').update(payload).eq('id', testimonial.id);
-        if (error) throw error;
-        toast.success('Testimonial updated!');
-      } else {
-        const { error } = await supabase.from('testimonials').insert([{ ...payload, display_order: 999 }]);
-        if (error) throw error;
-        toast.success('Testimonial added!');
-      }
+      const payload = {
+        ...data,
+        id: testimonial?.id,
+        image_url: imageUrl,
+      };
+      await db.saveTestimonial(payload);
+      toast.success(isEdit ? 'Testimonial updated!' : 'Testimonial added!');
       router.push('/admin/testimonials');
       router.refresh();
     } catch (err: unknown) {
-      toast.error(err instanceof Error ? err.message : 'Failed to save.');
+      toast.error(err instanceof Error ? err.message : 'Failed to save testimonial.');
     } finally {
       setSaving(false);
     }
@@ -99,7 +96,7 @@ export default function TestimonialForm({ testimonial }: { testimonial?: DbTesti
         </div>
       </div>
       <div className="rounded-2xl border border-white/8 bg-white/[0.02] p-5">
-        <ImageUpload value={imageUrl} onChange={setImageUrl} bucket="testimonial-images" folder="testimonials" label="Client Photo (Optional)" />
+        <ImageUpload value={imageUrl} onChange={setImageUrl} label="Client Photo (Optional)" />
       </div>
       <div className="flex items-center gap-3">
         <button type="submit" disabled={saving} className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 text-white font-semibold text-sm hover:opacity-90 transition-all disabled:opacity-50">

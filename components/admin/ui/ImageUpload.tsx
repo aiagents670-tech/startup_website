@@ -2,19 +2,17 @@
 
 import { useState, useRef } from 'react';
 import { Upload, X, Loader2, Image as ImageIcon } from 'lucide-react';
-import Image from 'next/image';
-import { supabase } from '@/lib/supabase/client';
 import toast from 'react-hot-toast';
 
 interface ImageUploadProps {
   value?: string | null;
   onChange: (url: string | null) => void;
-  bucket: string;
+  bucket?: string;
   folder?: string;
   label?: string;
 }
 
-export default function ImageUpload({ value, onChange, bucket, folder = '', label = 'Upload Image' }: ImageUploadProps) {
+export default function ImageUpload({ value, onChange, label = 'Upload Image' }: ImageUploadProps) {
   const [uploading, setUploading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -34,18 +32,22 @@ export default function ImageUpload({ value, onChange, bucket, folder = '', labe
 
     setUploading(true);
     try {
-      const ext = file.name.split('.').pop();
-      const fileName = `${folder ? folder + '/' : ''}${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
-      const { error } = await supabase.storage.from(bucket).upload(fileName, file, { upsert: false });
-      if (error) throw error;
-
-      const { data: { publicUrl } } = supabase.storage.from(bucket).getPublicUrl(fileName);
-      onChange(publicUrl);
-      toast.success('Image uploaded!');
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const result = event.target?.result as string;
+        onChange(result);
+        toast.success('Image uploaded!');
+        setUploading(false);
+      };
+      reader.onerror = () => {
+        toast.error('Failed to read image file.');
+        setUploading(false);
+      };
+      reader.readAsDataURL(file);
     } catch (err: unknown) {
       toast.error(err instanceof Error ? err.message : 'Upload failed.');
-    } finally {
       setUploading(false);
+    } finally {
       if (inputRef.current) inputRef.current.value = '';
     }
   };
@@ -60,7 +62,7 @@ export default function ImageUpload({ value, onChange, bucket, folder = '', labe
 
       {value ? (
         <div className="relative w-full h-40 rounded-xl overflow-hidden border border-white/10 group">
-          <Image src={value} alt="Uploaded" fill className="object-cover" />
+          <img src={value} alt="Uploaded" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
             <button
               type="button"

@@ -5,15 +5,15 @@ import { Mail, Phone, MessageCircle } from 'lucide-react';
 export const metadata: Metadata = {
   title: 'Contact Us',
   description:
-    'Get in touch with TechVision. Book a free consultation, request a quote, or reach us via email, phone, or WhatsApp. We respond within 24 hours.',
+    'Get in touch with TERVOM. Book a free consultation, request a quote, or reach us via email, phone, or WhatsApp. We respond within 24 hours.',
 };
 
 const contactInfo = [
   {
     icon: Mail,
     label: 'Email Us',
-    value: 'hello@techvision.io',
-    href: 'mailto:hello@techvision.io',
+    value: 'hello@tervom.com',
+    href: 'mailto:hello@tervom.com',
     color: 'bg-blue-500/10',
     iconColor: 'text-blue-500',
   },
@@ -27,9 +27,9 @@ const contactInfo = [
   },
   {
     icon: MessageCircle,
-    label: 'WhatsApp',
+    label: 'WhatsApp Chat',
     value: '+91 74168 58563',
-    href: 'https://wa.me/917416858563',
+    href: 'https://wa.me/917416858563?text=Hello%20TERVOM%2C%20I%20would%20like%20to%20discuss%20a%20project',
     color: 'bg-emerald-500/10',
     iconColor: 'text-emerald-500',
   },
@@ -72,6 +72,7 @@ export default function ContactPage() {
                 </p>
               </div>
 
+              {/* Contact Info Cards */}
               {contactInfo.map(({ icon: Icon, label, value, href, color, iconColor }) => (
                 <a
                   key={label}
@@ -90,16 +91,50 @@ export default function ContactPage() {
                 </a>
               ))}
 
+              {/* Dedicated WhatsApp Quick Chat Banner */}
+              <div className="glass-card p-6 bg-gradient-to-br from-emerald-950/40 via-[var(--surface-1)] to-[var(--surface-2)] border border-emerald-500/30 rounded-2xl space-y-4 shadow-lg">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-2xl bg-[#25D366]/20 border border-[#25D366]/30 flex items-center justify-center flex-shrink-0">
+                    <MessageCircle size={24} className="text-[#25D366] animate-pulse" />
+                  </div>
+                  <div>
+                    <h3 className="font-heading font-bold text-base text-[var(--foreground)] flex items-center gap-2">
+                      Chat on WhatsApp
+                      <span className="relative flex h-2.5 w-2.5">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#25D366] opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#25D366]"></span>
+                      </span>
+                    </h3>
+                    <p className="text-xs text-[var(--muted)]">Instant response • Active now</p>
+                  </div>
+                </div>
+
+                <p className="text-xs text-[var(--foreground)]/80 leading-relaxed">
+                  Prefer real-time chat? Tap below to connect directly with our engineering team on WhatsApp.
+                </p>
+
+                <a
+                  href="https://wa.me/917416858563?text=Hello%20TERVOM%2C%20I%20would%20like%20to%20discuss%20a%20project"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  id="contact-whatsapp-direct-btn"
+                  className="w-full py-3.5 px-4 rounded-xl bg-[#25D366] hover:bg-[#20bd5a] text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-[0_4px_16px_rgba(37,211,102,0.3)] hover:shadow-[0_6px_24px_rgba(37,211,102,0.5)] transition-all active:scale-98"
+                >
+                  <MessageCircle size={18} />
+                  Start WhatsApp Chat Now
+                </a>
+              </div>
+
               {/* Social links */}
               <div className="glass-card p-5">
                 <h3 className="font-semibold text-[var(--foreground)] mb-4">Follow Us</h3>
                 <div className="flex flex-wrap gap-3">
                   {[
-                    { name: 'Twitter', href: 'https://twitter.com/techvision', emoji: '🐦' },
-                    { name: 'LinkedIn', href: 'https://linkedin.com/company/techvision', emoji: '💼' },
-                    { name: 'GitHub', href: 'https://github.com/techvision', emoji: '🐙' },
-                    { name: 'YouTube', href: 'https://youtube.com/techvision', emoji: '▶️' },
-                    { name: 'Instagram', href: 'https://instagram.com/techvision', emoji: '📷' },
+                    { name: 'Twitter', href: 'https://twitter.com/tervom', emoji: '🐦' },
+                    { name: 'LinkedIn', href: 'https://linkedin.com/company/tervom', emoji: '💼' },
+                    { name: 'GitHub', href: 'https://github.com/tervom', emoji: '🐙' },
+                    { name: 'YouTube', href: 'https://youtube.com/tervom', emoji: '▶️' },
+                    { name: 'Instagram', href: 'https://instagram.com/tervom', emoji: '📷' },
                   ].map(({ name, href, emoji }) => (
                     <a
                       key={name}

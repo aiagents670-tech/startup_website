@@ -1,10 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { ExternalLink, ArrowRight } from 'lucide-react';
-import { portfolioProjects, portfolioCategories } from '@/lib/data/portfolio';
+import { portfolioProjects as staticPortfolio, portfolioCategories } from '@/lib/data/portfolio';
+import { db } from '@/lib/db';
 
 const categoryLabels: Record<string, string> = {
   all: 'All Projects',
@@ -18,11 +19,46 @@ const categoryLabels: Record<string, string> = {
 
 export default function Portfolio() {
   const [activeFilter, setActiveFilter] = useState('all');
+  const [projectsList, setProjectsList] = useState<any[]>(staticPortfolio);
+
+  useEffect(() => {
+    async function load() {
+      try {
+        const live = await db.getPortfolio();
+        if (live && live.length > 0) {
+          const formatted = live
+            .filter((p) => p.is_active !== false)
+            .map((p) => ({
+              id: p.id,
+              slug: p.slug || p.title.toLowerCase().replace(/\s+/g, '-'),
+              title: p.title,
+              category: p.category.toLowerCase(),
+              categoryLabel: p.category,
+              description: p.short_description,
+              tech: p.technologies || [],
+              image: p.image_url || '/images/portfolio/fintrack.jpg',
+              liveUrl: p.demo_url || '#',
+              featured: p.is_featured,
+            }));
+          if (formatted.length > 0) setProjectsList(formatted);
+        }
+      } catch (err) {
+        console.error('Error loading live portfolio:', err);
+      }
+    }
+    load();
+    window.addEventListener('tervom_db_updated', load);
+    window.addEventListener('storage', load);
+    return () => {
+      window.removeEventListener('tervom_db_updated', load);
+      window.removeEventListener('storage', load);
+    };
+  }, []);
 
   const filtered =
     activeFilter === 'all'
-      ? portfolioProjects
-      : portfolioProjects.filter((p) => p.category === activeFilter);
+      ? projectsList
+      : projectsList.filter((p) => p.category.toLowerCase() === activeFilter.toLowerCase());
 
   return (
     <section id="portfolio" className="section-padding bg-[var(--surface)]" aria-label="Portfolio">
@@ -122,7 +158,7 @@ export default function Portfolio() {
 
                   {/* Tech stack */}
                   <div className="flex flex-wrap gap-1.5 mb-5">
-                    {project.tech.slice(0, 4).map((t) => (
+                    {project.tech.slice(0, 4).map((t: string) => (
                       <span key={t} className="text-xs px-2.5 py-1 rounded-lg bg-primary-500/10 text-primary-600 dark:text-primary-400 font-medium">
                         {t}
                       </span>

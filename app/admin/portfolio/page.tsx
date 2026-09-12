@@ -5,8 +5,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Plus, Search, Edit2, Trash2 } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { supabase } from '@/lib/supabase/client';
-import type { DbPortfolio } from '@/lib/supabase/types';
+import { db } from '@/lib/db';
+import type { DbPortfolio } from '@/lib/types/db';
 import AdminHeader from '@/components/admin/layout/AdminHeader';
 import AdminModal from '@/components/admin/ui/AdminModal';
 import AdminEmptyState from '@/components/admin/ui/AdminEmptyState';
@@ -20,8 +20,8 @@ export default function AdminPortfolioPage() {
 
   const fetch = async () => {
     setLoading(true);
-    const { data } = await supabase.from('portfolio').select('*').order('display_order');
-    if (data) setProjects(data as DbPortfolio[]);
+    const data = await db.getPortfolio();
+    setProjects(data);
     setLoading(false);
   };
 
@@ -32,10 +32,11 @@ export default function AdminPortfolioPage() {
   const handleDelete = async () => {
     if (!deleteTarget) return;
     setDeleting(true);
-    const { error } = await supabase.from('portfolio').delete().eq('id', deleteTarget.id);
+    await db.deletePortfolio(deleteTarget.id);
     setDeleting(false);
-    if (error) toast.error('Delete failed');
-    else { toast.success('Project deleted'); setDeleteTarget(null); fetch(); }
+    toast.success('Project deleted');
+    setDeleteTarget(null);
+    fetch();
   };
 
   return (

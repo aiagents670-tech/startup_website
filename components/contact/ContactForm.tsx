@@ -4,7 +4,20 @@ import { useState, useEffect, Suspense } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Send, CheckCircle, Loader2, AlertCircle } from 'lucide-react';
+import {
+  Send,
+  CheckCircle,
+  Loader2,
+  AlertCircle,
+  Copy,
+  Check,
+  Terminal,
+  Zap,
+  ChevronDown,
+  ChevronUp,
+  RefreshCw,
+  ExternalLink,
+} from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 
 const schema = z.object({
@@ -84,6 +97,10 @@ function ContactFormInner() {
   const [submitted, setSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [n8nResponse, setN8nResponse] = useState<any | null>(null);
+  const [submittedPayload, setSubmittedPayload] = useState<FormData | null>(null);
+  const [copied, setCopied] = useState(false);
+  const [showPayload, setShowPayload] = useState(false);
 
   const {
     register,
@@ -110,70 +127,208 @@ function ContactFormInner() {
   const onSubmit = async (data: FormData) => {
     setIsLoading(true);
     setSubmitError(null);
+    setN8nResponse(null);
+    setSubmittedPayload(data);
+
     try {
-      const { supabase } = await import('@/lib/supabaseClient');
-      const { error } = await supabase.from('contact_submissions').insert([
-        {
-          name: data.name,
-          email: data.email,
-          business_type: data.businessType,
-          phone: data.phone || null,
-          service: data.service,
-          budget: data.budget,
-          message: data.message,
-          created_at: new Date().toISOString(),
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
-      ]);
+        body: JSON.stringify(data),
+      });
 
-      if (error) {
-        // Table not created yet — warn silently, still show success to user
-        const isTableMissing =
-          error.code === 'PGRST205' ||
-          error.code === '42P01' ||
-          error.message?.includes('schema cache') ||
-          error.message?.includes('does not exist') ||
-          error.message?.includes('Could not find');
+      const result = await response.json();
 
-        if (isTableMissing) {
-          console.warn('⚠ Supabase table not created yet. Run supabase_schema.sql in your Supabase dashboard.');
-        } else {
-          // Real error — surface it to user
-          console.error('Supabase contact submission error:', error.message, error.code);
-          setSubmitError('Something went wrong while sending your message. Please try again or email us directly.');
-          return;
-        }
+      if (response.ok && result.success) {
+        setN8nResponse(result.n8nResponse || null);
+        setSubmitted(true);
+        reset();
       } else {
-        console.log('✅ Contact submission stored in Supabase successfully.');
+        setSubmitError(result.message || 'Failed to submit form. Please try again.');
       }
-
-      setSubmitted(true);
-      reset();
     } catch (err) {
-      console.error('Error submitting to Supabase:', err);
-      setSubmitError('An unexpected error occurred. Please try again later.');
+      console.error('Error submitting contact message:', err);
+      setSubmitError('An unexpected error occurred. Please check your connection and try again.');
     } finally {
       setIsLoading(false);
     }
   };
 
+  const handleCopyResponse = () => {
+    if (!n8nResponse) return;
+    const textToCopy =
+      typeof n8nResponse.body === 'object'
+        ? JSON.stringify(n8nResponse.body, null, 2)
+        : String(n8nResponse.body || JSON.stringify(n8nResponse, null, 2));
+
+    navigator.clipboard.writeText(textToCopy);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   if (submitted) {
+    const isSuccessStatus = n8nResponse?.ok || (n8nResponse?.status >= 200 && n8nResponse?.status < 300);
+    const statusText = n8nResponse?.status
+      ? `${n8nResponse.status} ${n8nResponse.statusText || (isSuccessStatus ? 'OK' : '')}`
+      : 'Processed';
+
+    const responseContentString =
+      typeof n8nResponse?.body === 'object'
+        ? JSON.stringify(n8nResponse.body, null, 2)
+        : n8nResponse?.body
+        ? String(n8nResponse.body)
+        : isSuccessStatus
+        ? '{"message": "Workflow executed successfully", "status": "success"}'
+        : '{"message": "No body returned from n8n test webhook"}';
+
     return (
-      <div className="glass-card p-12 text-center">
-        <div className="w-20 h-20 rounded-full bg-green-500/10 flex items-center justify-center mx-auto mb-6">
-          <CheckCircle size={40} className="text-green-500" />
+      <div className="glass-card p-6 sm:p-8 space-y-6 animate-fade-in">
+        {/* Success Header */}
+        <div className="text-center pb-4 border-b border-[var(--border)]">
+          <div className="w-16 h-16 rounded-full bg-green-500/10 flex items-center justify-center mx-auto mb-4 border border-green-500/20">
+            <CheckCircle size={36} className="text-green-500 animate-pulse" />
+          </div>
+          <h3 className="font-heading text-2xl font-bold text-[var(--foreground)] mb-2">
+            Inquiry Sent & n8n Workflow Triggered! 🎉
+          </h3>
+          <p className="text-[var(--muted)] text-sm max-w-md mx-auto">
+            Your inquiry was submitted and forwarded to the n8n webhook workflow. Below is the direct response received from n8n.
+          </p>
         </div>
-        <h3 className="font-heading text-2xl font-bold text-[var(--foreground)] mb-3">
-          Message Sent! 🎉
-        </h3>
-        <p className="text-[var(--muted)] mb-6">
-          Thank you for reaching out. Our team will get back to you within 24 hours with a personalized response.
-        </p>
-        <button
-          onClick={() => setSubmitted(false)}
-          className="gradient-bg text-white font-semibold px-8 py-3 rounded-xl hover:opacity-90 transition-opacity"
-        >
-          Send Another Message
-        </button>
+
+        {/* Webhook Execution Meta Badges */}
+        <div className="flex flex-wrap items-center justify-between gap-3 p-4 rounded-xl bg-[var(--surface-2)] border border-[var(--border)]">
+          <div className="flex items-center gap-2">
+            <span
+              className={`px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1.5 ${
+                isSuccessStatus
+                  ? 'bg-green-500/15 text-green-400 border border-green-500/30'
+                  : 'bg-amber-500/15 text-amber-400 border border-amber-500/30'
+              }`}
+            >
+              <span className={`w-2 h-2 rounded-full ${isSuccessStatus ? 'bg-green-400 animate-ping' : 'bg-amber-400'}`} />
+              n8n Status: {statusText}
+            </span>
+            {n8nResponse?.responseTimeMs > 0 && (
+              <span className="px-3 py-1 rounded-full text-xs font-semibold bg-primary-500/10 text-primary-400 border border-primary-500/20 flex items-center gap-1">
+                <Zap size={12} />
+                {n8nResponse.responseTimeMs} ms
+              </span>
+            )}
+          </div>
+          <a
+            href={n8nResponse?.webhookUrl || 'https://hemu123.app.n8n.cloud/webhook/tervom-inquiry'}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs text-[var(--muted)] hover:text-primary-400 transition-colors flex items-center gap-1 truncate max-w-[220px] sm:max-w-xs"
+            title={n8nResponse?.webhookUrl || 'https://hemu123.app.n8n.cloud/webhook/tervom-inquiry'}
+          >
+            <ExternalLink size={12} className="flex-shrink-0" />
+            <span className="truncate">Webhook Endpoint</span>
+          </a>
+        </div>
+
+        {/* n8n Response Output Box */}
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <label className="text-xs font-bold uppercase tracking-wider text-[var(--muted)] flex items-center gap-1.5">
+              <Terminal size={14} className="text-primary-400" />
+              n8n Workflow Response Payload
+            </label>
+            <button
+              onClick={handleCopyResponse}
+              className="text-xs text-primary-400 hover:text-primary-300 font-medium flex items-center gap-1 px-2.5 py-1 rounded-lg bg-primary-500/10 border border-primary-500/20 transition-all active:scale-95"
+            >
+              {copied ? (
+                <>
+                  <Check size={12} className="text-green-400" />
+                  <span>Copied!</span>
+                </>
+              ) : (
+                <>
+                  <Copy size={12} />
+                  <span>Copy JSON</span>
+                </>
+              )}
+            </button>
+          </div>
+
+          <pre className="p-4 rounded-xl bg-slate-950 text-slate-100 font-mono text-xs overflow-x-auto max-h-60 border border-slate-800 leading-relaxed shadow-inner select-all">
+            <code>{responseContentString}</code>
+          </pre>
+        </div>
+
+        {/* n8n Webhook Status Banner (Shown if webhook returned non-200) */}
+        {(!isSuccessStatus || n8nResponse?.status === 404) && (
+          <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs flex items-start gap-3">
+            <AlertCircle size={18} className="flex-shrink-0 mt-0.5 text-amber-400" />
+            <div className="space-y-1">
+              <p className="font-semibold text-amber-200">n8n Production Webhook Status:</p>
+              <p className="leading-relaxed">
+                Ensure your n8n workflow is toggled to <strong>Active</strong> in your n8n dashboard so production webhooks (<code className="px-1 py-0.5 bg-amber-500/20 rounded font-mono text-[11px]">/webhook/tervom-inquiry</code>) listen and execute automatically 24/7!
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Collapsible Form Payload Preview */}
+        {submittedPayload && (
+          <div className="border border-[var(--border)] rounded-xl overflow-hidden bg-[var(--surface-2)]/50">
+            <button
+              onClick={() => setShowPayload(!showPayload)}
+              className="w-full px-4 py-3 text-xs font-semibold text-[var(--muted)] hover:text-[var(--foreground)] flex items-center justify-between transition-colors uppercase tracking-wider"
+            >
+              <span>Submitted Data Payload</span>
+              {showPayload ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+            </button>
+
+            {showPayload && (
+              <div className="p-4 pt-0 space-y-2 border-t border-[var(--border)] text-xs text-[var(--foreground)] font-mono">
+                <div className="grid grid-cols-3 gap-2 py-1 border-b border-[var(--border)]/50">
+                  <span className="text-[var(--muted)] font-sans">Name:</span>
+                  <span className="col-span-2">{submittedPayload.name}</span>
+                </div>
+                <div className="grid grid-cols-3 gap-2 py-1 border-b border-[var(--border)]/50">
+                  <span className="text-[var(--muted)] font-sans">Email:</span>
+                  <span className="col-span-2 truncate">{submittedPayload.email}</span>
+                </div>
+                <div className="grid grid-cols-3 gap-2 py-1 border-b border-[var(--border)]/50">
+                  <span className="text-[var(--muted)] font-sans">Service:</span>
+                  <span className="col-span-2">{submittedPayload.service}</span>
+                </div>
+                <div className="grid grid-cols-3 gap-2 py-1 border-b border-[var(--border)]/50">
+                  <span className="text-[var(--muted)] font-sans">Business:</span>
+                  <span className="col-span-2">{submittedPayload.businessType}</span>
+                </div>
+                <div className="grid grid-cols-3 gap-2 py-1 border-b border-[var(--border)]/50">
+                  <span className="text-[var(--muted)] font-sans">Budget:</span>
+                  <span className="col-span-2">{submittedPayload.budget}</span>
+                </div>
+                <div className="grid grid-cols-3 gap-2 py-1">
+                  <span className="text-[var(--muted)] font-sans">Message:</span>
+                  <span className="col-span-2 whitespace-pre-wrap font-sans">{submittedPayload.message}</span>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Primary Action Button */}
+        <div className="pt-2">
+          <button
+            onClick={() => {
+              setSubmitted(false);
+              setN8nResponse(null);
+              setSubmittedPayload(null);
+            }}
+            className="w-full gradient-bg text-white font-semibold py-3.5 rounded-xl hover:opacity-90 transition-all flex items-center justify-center gap-2 text-sm shadow-md active:scale-98"
+          >
+            <RefreshCw size={16} />
+            Send Another Inquiry
+          </button>
+        </div>
       </div>
     );
   }

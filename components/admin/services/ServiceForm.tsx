@@ -1,15 +1,15 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Loader2, Plus, X } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { supabase } from '@/lib/supabase/client';
+import { db } from '@/lib/db';
 import ImageUpload from '@/components/admin/ui/ImageUpload';
-import type { DbService } from '@/lib/supabase/types';
+import type { DbService } from '@/lib/types/db';
 
 const schema = z.object({
   name:              z.string().min(2, 'Name required'),
@@ -20,12 +20,12 @@ const schema = z.object({
   full_description:  z.string().optional(),
   pricing:           z.string().optional(),
   delivery_time:     z.string().optional(),
-  button_text:       z.string().default('Get a Quote'),
-  button_link:       z.string().default('/contact'),
-  color:             z.string().default('from-blue-500 to-cyan-500'),
-  bg:                z.string().default('bg-blue-500/10'),
-  is_featured:       z.boolean().default(false),
-  is_active:         z.boolean().default(true),
+  button_text:       z.string(),
+  button_link:       z.string(),
+  color:             z.string(),
+  bg:                z.string(),
+  is_featured:       z.boolean(),
+  is_active:         z.boolean(),
   seo_title:         z.string().optional(),
   seo_description:   z.string().optional(),
 });
@@ -68,7 +68,6 @@ export default function ServiceForm({ service }: ServiceFormProps) {
     },
   });
 
-  // Auto-generate slug from name
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue('name', e.target.value);
     if (!isEdit) {
@@ -92,20 +91,19 @@ export default function ServiceForm({ service }: ServiceFormProps) {
   const onSubmit = async (data: FormValues) => {
     setSaving(true);
     try {
-      const payload = { ...data, image_url: imageUrl, features, technologies };
-      if (isEdit) {
-        const { error } = await supabase.from('services').update(payload).eq('id', service.id);
-        if (error) throw error;
-        toast.success('Service updated!');
-      } else {
-        const { error } = await supabase.from('services').insert([{ ...payload, display_order: 999 }]);
-        if (error) throw error;
-        toast.success('Service created!');
-      }
+      const payload = {
+        ...data,
+        id: service?.id,
+        image_url: imageUrl,
+        features,
+        technologies,
+      };
+      await db.saveService(payload);
+      toast.success(isEdit ? 'Service updated!' : 'Service created!');
       router.push('/admin/services');
       router.refresh();
     } catch (err: unknown) {
-      toast.error(err instanceof Error ? err.message : 'Failed to save.');
+      toast.error(err instanceof Error ? err.message : 'Failed to save service.');
     } finally {
       setSaving(false);
     }
@@ -160,7 +158,7 @@ export default function ServiceForm({ service }: ServiceFormProps) {
       {/* Image */}
       <div className="rounded-2xl border border-white/8 bg-white/[0.02] p-5">
         <h3 className="text-sm font-semibold text-slate-300 mb-4">Service Image</h3>
-        <ImageUpload value={imageUrl} onChange={setImageUrl} bucket="service-images" folder="services" label="Service Image (Optional)" />
+        <ImageUpload value={imageUrl} onChange={setImageUrl} label="Service Image (Optional)" />
       </div>
 
       {/* Features & Technologies */}

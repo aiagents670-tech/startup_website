@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import AdminHeader from '@/components/admin/layout/AdminHeader';
 import StatsCard from '@/components/admin/ui/StatsCard';
-import { supabase } from '@/lib/supabase/client';
+import { db } from '@/lib/db';
 
 interface Stats {
   services: number;
@@ -30,19 +30,19 @@ export default function AdminDashboardPage() {
   useEffect(() => {
     async function fetchStats() {
       try {
-        const [svc, port, blg, msg, test] = await Promise.all([
-          supabase.from('services').select('id', { count: 'exact', head: true }),
-          supabase.from('portfolio').select('id', { count: 'exact', head: true }),
-          supabase.from('blogs').select('id', { count: 'exact', head: true }),
-          supabase.from('contact_submissions').select('id', { count: 'exact', head: true }),
-          supabase.from('testimonials').select('id', { count: 'exact', head: true }),
+        const [services, portfolio, blogs, messages, testimonials] = await Promise.all([
+          db.getServices(),
+          db.getPortfolio(),
+          db.getBlogs(),
+          db.getMessages(),
+          db.getTestimonials(),
         ]);
         setStats({
-          services:     svc.count ?? 0,
-          portfolio:    port.count ?? 0,
-          blogs:        blg.count ?? 0,
-          messages:     msg.count ?? 0,
-          testimonials: test.count ?? 0,
+          services: services.length,
+          portfolio: portfolio.length,
+          blogs: blogs.length,
+          messages: messages.length,
+          testimonials: testimonials.length,
         });
       } catch (e) {
         console.error('Failed to load dashboard stats:', e);

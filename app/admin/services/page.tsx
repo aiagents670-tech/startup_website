@@ -3,18 +3,17 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Plus, Search, Edit2, Trash2, Eye, EyeOff, GripVertical } from 'lucide-react';
-import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { DndContext, closestCenter, DragEndEvent } from '@dnd-kit/core';
 import { SortableContext, useSortable, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { supabase } from '@/lib/supabase/client';
-import type { DbService } from '@/lib/supabase/types';
+import { db } from '@/lib/db';
+import type { DbService } from '@/lib/types/db';
 import AdminHeader from '@/components/admin/layout/AdminHeader';
 import AdminModal from '@/components/admin/ui/AdminModal';
 import AdminEmptyState from '@/components/admin/ui/AdminEmptyState';
 
-function SortableRow({ service, onEdit, onDelete, onToggle }: { service: DbService; onEdit: () => void; onDelete: () => void; onToggle: () => void }) {
+function SortableRow({ service, onDelete, onToggle }: { service: DbService; onDelete: () => void; onToggle: () => void }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: service.id });
   const style = { transform: CSS.Transform.toString(transform), transition, opacity: isDragging ? 0.5 : 1 };
 
@@ -69,11 +68,8 @@ export default function AdminServicesPage() {
 
   const fetchServices = async () => {
     setLoading(true);
-    const { data, error } = await supabase
-      .from('services')
-      .select('*')
-      .order('display_order', { ascending: true });
-    if (!error && data) setServices(data as DbService[]);
+    const data = await db.getServices();
+    setServices(data);
     setLoading(false);
   };
 
@@ -91,24 +87,24 @@ export default function AdminServicesPage() {
     const newIndex = services.findIndex(s => s.id === over.id);
     const reordered = arrayMove(services, oldIndex, newIndex);
     setServices(reordered);
-    // Persist new order
-    await Promise.all(reordered.map((s, i) => supabase.from('services').update({ display_order: i }).eq('id', s.id)));
+    await Promise.all(reordered.map((s, i) => db.saveService({ id: s.id, display_order: i })));
     toast.success('Order saved');
   };
 
   const handleToggle = async (service: DbService) => {
-    const { error } = await supabase.from('services').update({ is_active: !service.is_active }).eq('id', service.id);
-    if (error) toast.error('Failed to update');
-    else { toast.success(service.is_active ? 'Service disabled' : 'Service enabled'); fetchServices(); }
+    await db.saveService({ id: service.id, is_active: !service.is_active });
+    toast.success(service.is_active ? 'Service disabled' : 'Service enabled');
+    fetchServices();
   };
 
   const handleDelete = async () => {
     if (!deleteTarget) return;
     setDeleting(true);
-    const { error } = await supabase.from('services').delete().eq('id', deleteTarget.id);
+    await db.deleteService(deleteTarget.id);
     setDeleting(false);
-    if (error) toast.error('Delete failed');
-    else { toast.success('Service deleted'); setDeleteTarget(null); fetchServices(); }
+    toast.success('Service deleted');
+    setDeleteTarget(null);
+    fetchServices();
   };
 
   return (
@@ -165,7 +161,6 @@ export default function AdminServicesPage() {
                       <SortableRow
                         key={service.id}
                         service={service}
-                        onEdit={() => {}}
                         onDelete={() => setDeleteTarget(service)}
                         onToggle={() => handleToggle(service)}
                       />
@@ -183,7 +178,7 @@ export default function AdminServicesPage() {
         onClose={() => setDeleteTarget(null)}
         onConfirm={handleDelete}
         title="Delete Service"
-        description={`Are you sure you want to delete "${deleteTarget?.name}"? This will immediately remove it from the live website.`}
+        description={`Are you sure you want to delete "${deleteTarget?.name}"?`}
         confirmLabel="Delete"
         confirmDanger
         loading={deleting}
