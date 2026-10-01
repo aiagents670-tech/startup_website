@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { Plus, Search, Edit2, Trash2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { db } from '@/lib/db';
@@ -74,8 +73,9 @@ export default function AdminPortfolioPage() {
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-3">
                         {project.image_url ? (
-                          <div className="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0 relative">
-                            <Image src={project.image_url} alt={project.title} fill className="object-cover" />
+                          <div className="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img src={project.image_url} alt={project.title} className="w-full h-full object-cover" />
                           </div>
                         ) : (
                           <div className="w-10 h-10 rounded-lg bg-violet-500/20 flex items-center justify-center flex-shrink-0">

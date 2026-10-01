@@ -44,6 +44,11 @@ export default function AdminSettingsPage() {
         map[key] = typeof value === 'string' ? value : String(value ?? '');
       });
       setSettings(map);
+      // Load logo separately
+      const logoSetting = data.find(s => s.key === 'logo_url');
+      if (logoSetting && typeof logoSetting.value === 'string') {
+        setLogoUrl(logoSetting.value);
+      }
       setLoading(false);
     }
     loadSettings();
@@ -52,9 +57,10 @@ export default function AdminSettingsPage() {
   const handleSave = async () => {
     setSaving(true);
     try {
-      await Promise.all(
-        SETTING_KEYS.map((key) => db.saveSetting(key, settings[key] ?? ''))
-      );
+      await Promise.all([
+        ...SETTING_KEYS.map((key) => db.saveSetting(key, settings[key] ?? '')),
+        db.saveSetting('logo_url', logoUrl ?? ''),
+      ]);
       toast.success('Settings saved!');
     } catch (err: unknown) {
       toast.error(err instanceof Error ? err.message : 'Failed to save settings.');

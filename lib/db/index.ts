@@ -7,6 +7,9 @@ import type {
   DbSetting,
 } from '@/lib/types/db';
 
+const DB_VERSION = '2'; // Bump this to reset seed data on next load
+const DB_VERSION_KEY = 'tervom_db_version';
+
 const STORAGE_KEYS = {
   BLOGS: 'tervom_blogs',
   SERVICES: 'tervom_services',
@@ -16,6 +19,21 @@ const STORAGE_KEYS = {
   SETTINGS: 'tervom_settings',
   SUBSCRIBERS: 'tervom_subscribers',
 };
+
+// Clear stale seed data when DB version changes
+if (typeof window !== 'undefined') {
+  const storedVersion = localStorage.getItem(DB_VERSION_KEY);
+  if (storedVersion !== DB_VERSION) {
+    // Only clear the seed collections (messages & settings are user-generated, preserve them)
+    [
+      STORAGE_KEYS.BLOGS,
+      STORAGE_KEYS.SERVICES,
+      STORAGE_KEYS.PORTFOLIO,
+      STORAGE_KEYS.TESTIMONIALS,
+    ].forEach(key => localStorage.removeItem(key));
+    localStorage.setItem(DB_VERSION_KEY, DB_VERSION);
+  }
+}
 
 const INITIAL_SERVICES: DbService[] = [
   {
@@ -179,7 +197,7 @@ const INITIAL_PORTFOLIO: DbPortfolio[] = [
     slug: 'fintrack-pro',
     category: 'Web',
     client_name: 'FinTrack Inc.',
-    image_url: '/images/portfolio/fintrack.jpg',
+    image_url: null,
     short_description: 'A comprehensive financial management dashboard with real-time analytics and portfolio tracking.',
     full_description: 'Built a real-time dashboard with WebSocket data feeds, AI insights, and automated reporting.',
     technologies: ['Next.js', 'TypeScript', 'PostgreSQL', 'FastAPI'],
@@ -200,7 +218,7 @@ const INITIAL_PORTFOLIO: DbPortfolio[] = [
     slug: 'medicare-mobile',
     category: 'Mobile',
     client_name: 'MediCare Health',
-    image_url: '/images/portfolio/medicare.jpg',
+    image_url: null,
     short_description: 'A telemedicine platform enabling patients to consult doctors via video and track health metrics.',
     full_description: 'Developed a cross-platform app with HD video consultations and offline-capable health tracking.',
     technologies: ['Flutter', 'Firebase', 'Node.js', 'WebRTC'],
@@ -221,7 +239,7 @@ const INITIAL_PORTFOLIO: DbPortfolio[] = [
     slug: 'shopsmart-ai',
     category: 'Ecommerce',
     client_name: 'ShopSmart Retail',
-    image_url: '/images/portfolio/shopsmart.jpg',
+    image_url: null,
     short_description: 'AI-powered ecommerce platform with personalized product recommendations and dynamic pricing.',
     full_description: 'Implemented ML-based recommendation engine and AI-driven personalization.',
     technologies: ['React', 'Python', 'TensorFlow', 'AWS'],
@@ -244,7 +262,7 @@ const INITIAL_TESTIMONIALS: DbTestimonial[] = [
     client_name: 'Sarah Mitchell',
     company: 'FinTrack Pro',
     position: 'CEO',
-    image_url: '/images/testimonials/sarah.jpg',
+    image_url: null,
     review: 'TERVOM delivered beyond our expectations. The platform completely transformed how we manage portfolios. Their team was professional, communicative, and technically brilliant throughout.',
     rating: 5,
     project: 'Financial Dashboard',
@@ -259,7 +277,7 @@ const INITIAL_TESTIMONIALS: DbTestimonial[] = [
     client_name: 'Dr. James Chen',
     company: 'MediCare Health',
     position: 'CTO',
-    image_url: '/images/testimonials/james.jpg',
+    image_url: null,
     review: 'The telemedicine app TERVOM built has genuinely improved healthcare access for thousands of patients. The quality of the code and the user experience were exceptional.',
     rating: 5,
     project: 'Telemedicine Platform',
@@ -274,7 +292,7 @@ const INITIAL_TESTIMONIALS: DbTestimonial[] = [
     client_name: 'Maria Rodriguez',
     company: 'ShopSmart Retail',
     position: 'Head of Digital',
-    image_url: '/images/testimonials/maria.jpg',
+    image_url: null,
     review: 'The AI-powered recommendation engine increased our conversion rate by 62%. TERVOM\'s deep understanding of ecommerce and AI made this project a massive success.',
     rating: 5,
     project: 'AI Ecommerce Platform',
@@ -293,7 +311,7 @@ const INITIAL_BLOGS: DbBlog[] = [
     slug: 'future-of-ai-in-web-development',
     author: 'Alex Rivera',
     category: 'AI',
-    image_url: '/images/blog/ai-web-dev.jpg',
+    image_url: null,
     short_description: 'Explore how artificial intelligence is reshaping web development, from AI coding to dynamic UI generation.',
     content: '<p>Artificial Intelligence is rapidly revolutionizing web engineering...</p>',
     tags: ['AI', 'Web Development', 'Future Tech'],
@@ -311,7 +329,7 @@ const INITIAL_BLOGS: DbBlog[] = [
     slug: 'nextjs-performance-optimization',
     author: 'Priya Sharma',
     category: 'React',
-    image_url: '/images/blog/nextjs-performance.jpg',
+    image_url: null,
     short_description: 'Learn advanced techniques to optimize your Next.js application for maximum performance.',
     content: '<p>Next.js 15 introduces powerful Server Components and caching optimization...</p>',
     tags: ['Next.js', 'Performance', 'React'],

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -38,6 +38,8 @@ export default function BlogForm({ blog }: { blog?: DbBlog }) {
   const [tags, setTags] = useState<string[]>(blog?.tags ?? []);
   const [tagInput, setTagInput] = useState('');
   const [saving, setSaving] = useState(false);
+  // Track whether the user clicked "Publish" or "Save as Draft"
+  const submitActionRef = useRef<'published' | 'draft'>('draft');
 
   const editor = useEditor({
     extensions: [
@@ -113,13 +115,15 @@ export default function BlogForm({ blog }: { blog?: DbBlog }) {
     try {
       const content = editor?.getHTML() || '';
       const now = new Date().toISOString();
-      // If publishing and no published_at date is set, default to now
-      const published_at = data.status === 'published'
+      // Use the ref-captured action (set synchronously before form submit fires)
+      const status = submitActionRef.current;
+      const published_at = status === 'published'
         ? (data.published_at ? new Date(data.published_at).toISOString() : now)
         : null;
 
       const payload = {
         ...data,
+        status,
         id: blog?.id,
         image_url: imageUrl,
         tags,
@@ -251,7 +255,7 @@ export default function BlogForm({ blog }: { blog?: DbBlog }) {
       <div className="flex items-center gap-3 flex-wrap">
         <button
           type="submit"
-          onClick={() => setValue('status', 'published')}
+          onClick={() => { submitActionRef.current = 'published'; }}
           disabled={saving}
           className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-pink-600 to-rose-500 text-white font-semibold text-sm hover:opacity-90 transition-all disabled:opacity-50"
         >
@@ -260,7 +264,7 @@ export default function BlogForm({ blog }: { blog?: DbBlog }) {
         </button>
         <button
           type="submit"
-          onClick={() => setValue('status', 'draft')}
+          onClick={() => { submitActionRef.current = 'draft'; }}
           disabled={saving}
           className="px-6 py-2.5 rounded-xl border border-white/10 text-slate-400 hover:text-white text-sm transition-colors disabled:opacity-50"
         >

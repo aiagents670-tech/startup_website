@@ -26,8 +26,13 @@ export default function AdminSidebar() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleLogout = async () => {
-    document.cookie = 'admin-session=; path=/; max-age=0';
+    try {
+      await fetch('/api/admin/logout', { method: 'POST' });
+    } catch {
+      // ignore network errors — still redirect
+    }
     router.push('/admin/login');
+    router.refresh();
   };
 
   const SidebarContent = () => (
