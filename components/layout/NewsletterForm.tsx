@@ -65,7 +65,7 @@ export default function NewsletterForm() {
         noValidate
         suppressHydrationWarning
       >
-        <div className="relative flex-1 md:w-72">
+        <div className="relative flex-1 sm:w-72 md:w-72">
           <input
             id="newsletter-email-input"
             type="email"

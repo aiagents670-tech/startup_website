@@ -46,7 +46,7 @@ export default function Services() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Header */}
-        <div className="text-center mb-20">
+        <div className="text-center mb-8 sm:mb-12 lg:mb-16">
           <motion.span
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -80,7 +80,7 @@ export default function Services() {
         </div>
 
         {/* Services Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+        <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5">
           {activeServices.map((service, i) => {
             const contactHref = `/contact?service=${encodeURIComponent(service.title)}`;
 
@@ -183,7 +183,7 @@ export default function Services() {
         >
           <Link
             href="/services"
-            className="inline-flex items-center gap-2 gradient-bg text-white font-semibold px-8 py-4 rounded-2xl shadow-lg hover:opacity-90 hover:scale-105 transition-all"
+            className="inline-flex items-center gap-2 gradient-bg text-white font-semibold px-6 sm:px-8 py-3.5 sm:py-4 rounded-2xl shadow-lg hover:opacity-90 hover:scale-105 transition-all min-h-[48px] text-sm sm:text-base"
           >
             View All Services
             <ArrowRight size={18} />

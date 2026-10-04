@@ -55,8 +55,8 @@ export default function Footer() {
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Newsletter */}
-        <div className="py-12 border-b border-[var(--border)]">
-          <div className="glass-card p-8 flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="py-8 sm:py-12 border-b border-[var(--border)]">
+          <div className="glass-card p-5 sm:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-5 sm:gap-6">
             <div>
               <h3 className="text-xl font-heading font-bold text-[var(--foreground)] mb-1">
                 Stay ahead with TERVOM
@@ -70,7 +70,7 @@ export default function Footer() {
         </div>
 
         {/* Main Footer */}
-        <div className="py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8">
+        <div className="py-8 sm:py-12 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-6 sm:gap-8">
           {/* Brand */}
           <div className="lg:col-span-2">
             <Link href="/" className="flex items-center gap-3 mb-4">
@@ -140,7 +140,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="py-6 border-t border-[var(--border)] flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="py-5 sm:py-6 border-t border-[var(--border)] flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex flex-wrap items-center gap-4 text-center md:text-left">
             <p className="text-[var(--muted)] text-sm">
               © {new Date().getFullYear()} TERVOM. All rights reserved. Code. Innovate. Elevate.
@@ -154,7 +154,7 @@ export default function Footer() {
               Admin Login
             </Link>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3 flex-wrap justify-center sm:justify-start">
             {socialLinks.map(({ icon: Icon, href, label }) => (
               <a
                 key={label}
@@ -162,9 +162,9 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={label}
-                className="w-9 h-9 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] flex items-center justify-center text-[var(--muted)] hover:text-primary-500 hover:border-primary-500/50 hover:bg-primary-500/10 transition-all duration-200"
+                className="w-11 h-11 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] flex items-center justify-center text-[var(--muted)] hover:text-primary-500 hover:border-primary-500/50 hover:bg-primary-500/10 transition-all duration-200 active:scale-95"
               >
-                <Icon size={16} />
+                <Icon size={18} />
               </a>
             ))}
           </div>

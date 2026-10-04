@@ -55,7 +55,7 @@ export default function Testimonials() {
     <section id="testimonials" className="section-padding bg-[var(--surface)]" aria-label="Client testimonials">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-8 sm:mb-12 lg:mb-16">
           <motion.span
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -77,15 +77,15 @@ export default function Testimonials() {
 
         {/* Slider */}
         <div className="relative">
-          {/* Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+          {/* Cards: show 1 on mobile, 3 on md+ */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 items-center">
             {visible.map((testimonial, i) => (
               <motion.div
                 key={`${testimonial.id}-${i}`}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className={`glass-card p-6 transition-all duration-300 ${
-                  i === 1 ? 'md:scale-105 border-primary-500/30 shadow-xl' : 'md:scale-95 opacity-70'
+                className={`glass-card p-5 sm:p-6 transition-all duration-300 ${
+                  i === 1 ? 'md:scale-105 border-primary-500/30 shadow-xl' : 'hidden md:block md:scale-95 opacity-70'
                 }`}
               >
                 {/* Stars */}
@@ -120,15 +120,15 @@ export default function Testimonials() {
           </div>
 
           {/* Navigation */}
-          <div className="flex justify-center items-center gap-4 mt-8">
+          <div className="flex justify-center items-center gap-4 mt-6 sm:mt-8">
             <button
               id="testimonial-prev-btn"
               onClick={prev}
               suppressHydrationWarning
-              className="w-10 h-10 rounded-xl glass-card flex items-center justify-center text-[var(--muted)] hover:text-primary-500 hover:border-primary-500/50 transition-all"
+              className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl glass-card flex items-center justify-center text-[var(--muted)] hover:text-primary-500 hover:border-primary-500/50 transition-all active:scale-95"
               aria-label="Previous testimonial"
             >
-              <ChevronLeft size={18} />
+              <ChevronLeft size={20} />
             </button>
 
             {/* Dots */}
@@ -152,10 +152,10 @@ export default function Testimonials() {
               id="testimonial-next-btn"
               onClick={next}
               suppressHydrationWarning
-              className="w-10 h-10 rounded-xl glass-card flex items-center justify-center text-[var(--muted)] hover:text-primary-500 hover:border-primary-500/50 transition-all"
+              className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl glass-card flex items-center justify-center text-[var(--muted)] hover:text-primary-500 hover:border-primary-500/50 transition-all active:scale-95"
               aria-label="Next testimonial"
             >
-              <ChevronRight size={18} />
+              <ChevronRight size={20} />
             </button>
           </div>
         </div>

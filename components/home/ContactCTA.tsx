@@ -23,16 +23,16 @@ export default function ContactCTA() {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="glass-card p-12 sm:p-16"
+          className="glass-card p-6 sm:p-10 lg:p-16"
         >
           {/* Badge */}
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-2 gradient-bg-soft border border-primary-500/20 px-4 py-2 rounded-full mb-6"
+            className="inline-flex items-center gap-2 gradient-bg-soft border border-primary-500/20 px-3 sm:px-4 py-2 rounded-full mb-4 sm:mb-6 text-center"
           >
-            <span className="text-primary-500 text-sm font-semibold">✨ Limited Slots Available — Book Your Consultation</span>
+            <span className="text-primary-500 text-xs sm:text-sm font-semibold leading-snug">✨ Limited Slots Available — Book Your Consultation</span>
           </motion.div>
 
           <motion.h2
@@ -63,12 +63,12 @@ export default function ContactCTA() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.3 }}
-            className="flex flex-wrap justify-center gap-4 mb-10"
+          className="flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4 mb-6 sm:mb-10 w-full"
           >
             <Link
               href="/contact#booking"
               id="cta-book-consultation-btn"
-              className="inline-flex items-center gap-2 gradient-bg text-white font-semibold px-8 py-4 rounded-2xl shadow-xl hover:opacity-90 hover:scale-105 transition-all duration-200"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 gradient-bg text-white font-semibold px-6 sm:px-8 py-4 rounded-2xl shadow-xl hover:opacity-90 hover:scale-[1.02] transition-all duration-200 min-h-[52px] text-sm sm:text-base"
             >
               <Calendar size={18} />
               Schedule Free Consultation
@@ -76,7 +76,7 @@ export default function ContactCTA() {
             <Link
               href="/contact#quote"
               id="cta-get-quote-btn"
-              className="inline-flex items-center gap-2 glass-card text-[var(--foreground)] font-semibold px-8 py-4 rounded-2xl hover:border-primary-500/50 hover:scale-105 transition-all duration-200"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 glass-card text-[var(--foreground)] font-semibold px-6 sm:px-8 py-4 rounded-2xl hover:border-primary-500/50 hover:scale-[1.02] transition-all duration-200 min-h-[52px] text-sm sm:text-base"
             >
               <MessageCircle size={18} />
               Get a Quote
@@ -90,7 +90,7 @@ export default function ContactCTA() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.4 }}
-            className="flex flex-wrap justify-center gap-8 text-[var(--muted)] text-sm"
+            className="flex flex-col sm:flex-row flex-wrap justify-center gap-2 sm:gap-6 text-[var(--muted)] text-xs sm:text-sm text-center"
           >
             {[
               '✅ Free Discovery Call',

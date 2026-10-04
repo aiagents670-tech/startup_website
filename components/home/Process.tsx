@@ -18,7 +18,7 @@ export default function Process() {
     <section id="process" className="section-padding bg-[var(--surface)]" aria-label="Development process">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-8 sm:mb-12 lg:mb-16">
           <motion.span
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -52,7 +52,35 @@ export default function Process() {
           {/* Vertical line for desktop */}
           <div className="hidden lg:block absolute left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary-500/80 via-secondary-500/60 to-accent-500/40 transform -translate-x-1/2" />
 
-          <div className="space-y-8 lg:space-y-0">
+          {/* Mobile: simple vertical list with step number */}
+          <div className="flex flex-col gap-4 lg:hidden">
+            {steps.map((step, i) => (
+              <motion.div
+                key={step.number}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.06 }}
+                className="flex gap-4 items-start"
+              >
+                {/* Number circle */}
+                <div className="flex-shrink-0 w-10 h-10 rounded-full gradient-bg flex items-center justify-center text-white font-bold text-sm shadow-md mt-0.5">
+                  {step.number}
+                </div>
+                {/* Card */}
+                <div className="flex-1 glass-card p-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-xl">{step.icon}</span>
+                    <h3 className="font-heading font-bold text-[var(--foreground)] text-sm">{step.title}</h3>
+                  </div>
+                  <p className="text-[var(--muted)] text-xs leading-relaxed">{step.description}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Desktop: zig-zag timeline */}
+          <div className="hidden lg:block space-y-0">
             {steps.map((step, i) => {
               const isLeft = i % 2 === 0;
               return (
@@ -62,38 +90,28 @@ export default function Process() {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
-                  className={`relative lg:flex ${isLeft ? 'lg:flex-row' : 'lg:flex-row-reverse'} items-center gap-8 lg:mb-12`}
+                  className={`relative flex ${isLeft ? 'flex-row' : 'flex-row-reverse'} items-center gap-8 mb-12`}
                 >
                   {/* Card */}
-                  <div className={`lg:w-5/12 ${isLeft ? 'lg:text-right' : 'lg:text-left'}`}>
+                  <div className={`w-5/12 ${isLeft ? 'text-right' : 'text-left'}`}>
                     <div className="glass-card p-6 card-hover group">
-                      <div className={`flex items-center gap-3 mb-3 ${isLeft ? 'lg:flex-row-reverse' : 'lg:flex-row'}`}>
+                      <div className={`flex items-center gap-3 mb-3 ${isLeft ? 'flex-row-reverse' : 'flex-row'}`}>
                         <div className="text-2xl group-hover:scale-110 transition-transform">{step.icon}</div>
-                        <span className="text-xs font-bold uppercase tracking-widest text-primary-500">
-                          Step {step.number}
-                        </span>
+                        <span className="text-xs font-bold uppercase tracking-widest text-primary-500">Step {step.number}</span>
                       </div>
-                      <h3 className="font-heading font-bold text-[var(--foreground)] text-lg mb-2">
-                        {step.title}
-                      </h3>
-                      <p className="text-[var(--muted)] text-sm leading-relaxed">
-                        {step.description}
-                      </p>
+                      <h3 className="font-heading font-bold text-[var(--foreground)] text-lg mb-2">{step.title}</h3>
+                      <p className="text-[var(--muted)] text-sm leading-relaxed">{step.description}</p>
                     </div>
                   </div>
-
                   {/* Center dot */}
-                  <div className="hidden lg:flex lg:w-2/12 justify-center">
+                  <div className="w-2/12 flex justify-center">
                     <div className="relative">
-                      <div className="w-12 h-12 rounded-full gradient-bg flex items-center justify-center text-white font-bold text-sm shadow-lg z-10 relative">
-                        {step.number}
-                      </div>
+                      <div className="w-12 h-12 rounded-full gradient-bg flex items-center justify-center text-white font-bold text-sm shadow-lg z-10 relative">{step.number}</div>
                       <div className="absolute inset-0 rounded-full gradient-bg opacity-30 animate-ping" />
                     </div>
                   </div>
-
                   {/* Spacer */}
-                  <div className="lg:w-5/12" />
+                  <div className="w-5/12" />
                 </motion.div>
               );
             })}

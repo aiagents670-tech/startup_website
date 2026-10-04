@@ -39,19 +39,22 @@ export default function ContactPage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative pt-32 pb-16 overflow-hidden">
+      <section className="relative pt-20 sm:pt-28 pb-10 sm:pb-16 overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-0 left-0 w-96 h-96 bg-primary-500/10 rounded-full blur-3xl animate-blob" />
           <div className="absolute bottom-0 right-0 w-80 h-80 bg-secondary-500/10 rounded-full blur-3xl animate-blob animation-delay-2000" />
         </div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <span className="inline-block text-sm font-semibold uppercase tracking-widest text-primary-500 mb-4">
+          <span className="inline-block text-xs sm:text-sm font-semibold uppercase tracking-widest text-primary-500 mb-3 sm:mb-4">
             Get In Touch
           </span>
-          <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-[var(--foreground)] mb-6">
+          <h1
+            className="font-heading font-bold text-[var(--foreground)] mb-4 sm:mb-6"
+            style={{ fontSize: 'clamp(1.75rem, 6vw, 3.75rem)', lineHeight: 1.15 }}
+          >
             Let&apos;s Build Something <span className="gradient-text">Amazing Together</span>
           </h1>
-          <p className="text-[var(--muted)] text-lg max-w-2xl mx-auto">
+          <p className="text-[var(--muted)] text-sm sm:text-lg max-w-2xl mx-auto leading-relaxed">
             Ready to transform your business? We&apos;d love to hear about your project.
             Get a free consultation and custom quote within 24 hours.
           </p>
@@ -60,9 +63,15 @@ export default function ContactPage() {
 
       <section className="section-padding">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-5 gap-12">
-            {/* Contact info sidebar */}
-            <div className="lg:col-span-2 space-y-6">
+          {/* Mobile: form first, then contact info. Desktop: info left, form right */}
+          <div className="grid lg:grid-cols-5 gap-8 sm:gap-12">
+            {/* Contact Form — first on mobile */}
+            <div id="quote" className="lg:col-span-3 order-1 lg:order-2">
+              <ContactForm />
+            </div>
+
+            {/* Contact info sidebar — second on mobile */}
+            <div className="lg:col-span-2 space-y-4 sm:space-y-6 order-2 lg:order-1">
               <div>
                 <h2 className="font-heading text-2xl font-bold text-[var(--foreground)] mb-2">
                   Contact <span className="gradient-text">Information</span>
@@ -148,11 +157,6 @@ export default function ContactPage() {
                   ))}
                 </div>
               </div>
-            </div>
-
-            {/* Contact Form */}
-            <div id="quote" className="lg:col-span-3">
-              <ContactForm />
             </div>
           </div>
         </div>

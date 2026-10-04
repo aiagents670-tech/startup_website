@@ -91,6 +91,25 @@ textarea {
   touch-action: manipulation;
 }
 
+/* Prevent any element from causing horizontal overflow */
+img, video, svg, canvas {
+  max-width: 100%;
+}
+
+/* Safe-area padding for notched phones */
+.safe-top    { padding-top:    env(safe-area-inset-top); }
+.safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
+
+/* ─── Mobile minimum touch target helper ─────────────────────── */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+}
+.touch-target-lg {
+  min-height: 48px;
+  min-width: 48px;
+}
+
 /* ─── Glass Card ─────────────────────────────────────────────── */
 .glass-card {
   background: var(--card-bg);
@@ -197,15 +216,83 @@ textarea {
 
 /* ─── Section Utilities ──────────────────────────────────────── */
 .section-padding {
-  padding-top: 5rem;
-  padding-bottom: 5rem;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+@media (min-width: 640px) {
+  .section-padding {
+    padding-top: 4.5rem;
+    padding-bottom: 4.5rem;
+  }
 }
 
 @media (min-width: 768px) {
   .section-padding {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .section-padding {
     padding-top: 7rem;
     padding-bottom: 7rem;
   }
+}
+
+/* ─── Mobile-first container px ─────────────────────────────── */
+.mobile-px {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+@media (min-width: 640px) {
+  .mobile-px {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+/* ─── Responsive font scaling ────────────────────────────────── */
+.text-responsive-xl {
+  font-size: clamp(1.75rem, 5vw, 3rem);
+  line-height: 1.2;
+}
+.text-responsive-2xl {
+  font-size: clamp(2rem, 6vw, 3.75rem);
+  line-height: 1.15;
+}
+.text-responsive-hero {
+  font-size: clamp(2.1rem, 7vw, 4.5rem);
+  line-height: 1.1;
+}
+
+/* ─── Mobile card improvements ───────────────────────────────── */
+@media (max-width: 639px) {
+  .glass-card {
+    border-radius: 1.25rem;
+  }
+  /* Improve tap area for small filter buttons */
+  .filter-btn {
+    min-height: 44px;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* ─── Prevent overflow in tech pills, filter tabs ────────────── */
+.scroll-x-snap {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  scroll-snap-type: x mandatory;
+}
+.scroll-x-snap::-webkit-scrollbar {
+  display: none;
+}
+.snap-start {
+  scroll-snap-align: start;
 }
 
 /* ─── Hover Card Lift ────────────────────────────────────────── */

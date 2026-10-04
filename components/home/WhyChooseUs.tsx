@@ -25,7 +25,7 @@ export default function WhyChooseUs() {
       <div className="absolute top-0 right-0 w-96 h-96 bg-primary-500/10 rounded-full blur-3xl pointer-events-none" />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
           {/* Left — Text */}
           <div>
             <motion.span
@@ -74,8 +74,8 @@ export default function WhyChooseUs() {
             </motion.div>
           </div>
 
-          {/* Right — Feature grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {/* Right — Feature grid: 2-col always */}
+          <div className="grid grid-cols-2 gap-3 sm:gap-4">
             {features.map((f, i) => (
               <motion.div
                 key={f.title}

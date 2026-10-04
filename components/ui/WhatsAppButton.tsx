@@ -33,7 +33,7 @@ export default function WhatsAppButton() {
           whileHover={{ scale: 1.12 }}
           whileTap={{ scale: 0.95 }}
           transition={{ type: 'spring', stiffness: 260, damping: 20 }}
-          className="fixed bottom-5 right-5 sm:bottom-6 sm:right-20 z-[9999] flex items-center justify-center min-w-[48px] min-h-[48px]"
+          className="fixed bottom-4 right-4 sm:bottom-6 sm:right-20 z-[9999] flex items-center justify-center min-w-[56px] min-h-[56px]"
           style={{ textDecoration: 'none' }}
         >
           {/* Pulse ring */}

@@ -64,7 +64,7 @@ export default function Portfolio() {
     <section id="portfolio" className="section-padding bg-[var(--surface)]" aria-label="Portfolio">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-8 sm:mb-12">
           <motion.span
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -93,28 +93,30 @@ export default function Portfolio() {
           </motion.p>
         </div>
 
-        {/* Filter Tabs */}
+        {/* Filter Tabs — scroll-snap on mobile so they don't wrap */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="flex flex-wrap justify-center gap-3 mb-10"
+          className="mb-8 sm:mb-10"
         >
-          {portfolioCategories.map((cat) => (
-            <button
-              key={cat}
-              id={`portfolio-filter-${cat}`}
-              onClick={() => setActiveFilter(cat)}
-              suppressHydrationWarning
-              className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 ${
-                activeFilter === cat
-                  ? 'gradient-bg text-white shadow-lg scale-105'
-                  : 'glass-card text-[var(--muted)] hover:text-[var(--foreground)]'
-              }`}
-            >
-              {categoryLabels[cat] ?? cat}
-            </button>
-          ))}
+          <div className="scroll-x-snap flex gap-2 sm:gap-3 sm:flex-wrap sm:justify-center pb-1">
+            {portfolioCategories.map((cat) => (
+              <button
+                key={cat}
+                id={`portfolio-filter-${cat}`}
+                onClick={() => setActiveFilter(cat)}
+                suppressHydrationWarning
+                className={`snap-start flex-shrink-0 px-4 sm:px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 min-h-[44px] ${
+                  activeFilter === cat
+                    ? 'gradient-bg text-white shadow-lg scale-105'
+                    : 'glass-card text-[var(--muted)] hover:text-[var(--foreground)]'
+                }`}
+              >
+                {categoryLabels[cat] ?? cat}
+              </button>
+            ))}
+          </div>
         </motion.div>
 
         {/* Project Grid */}
@@ -203,7 +205,7 @@ export default function Portfolio() {
         >
           <Link
             href="/portfolio"
-            className="inline-flex items-center gap-2 gradient-bg text-white font-semibold px-8 py-4 rounded-2xl shadow-lg hover:opacity-90 hover:scale-105 transition-all"
+            className="inline-flex items-center gap-2 gradient-bg text-white font-semibold px-6 sm:px-8 py-3.5 sm:py-4 rounded-2xl shadow-lg hover:opacity-90 hover:scale-105 transition-all min-h-[48px] text-sm sm:text-base"
           >
             View All Projects
             <ArrowRight size={18} />
